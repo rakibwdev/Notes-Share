@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('generics', function (Blueprint $table) {
             $table->id();
+
+            $table->string('generic_name')->unique();
+
             $table->timestamps();
         });
     }

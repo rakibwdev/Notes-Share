@@ -11,19 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('brand_units', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('brand_id')
+                ->constrained('brands')
+                ->cascadeOnDelete();
+
+            $table->foreignId('unit_id')
+                ->constrained('units')
+                ->cascadeOnDelete();
 
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->date('date');
-            $table->time('time');
+            $table->unsignedInteger('quantity')->default(1);
 
-            $table->decimal('total', 12, 2)->default(0);
+            $table->boolean('isEditable')->default(true);
 
             $table->timestamps();
+            $table->softDeletes(); // deleted_at
         });
     }
 
@@ -32,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('brand_units');
     }
 };

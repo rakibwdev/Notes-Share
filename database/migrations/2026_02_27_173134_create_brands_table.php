@@ -13,6 +13,22 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
+
+            $table->string('brand_name');
+
+            $table->foreignId('generic_id')
+                ->constrained('generics')
+                ->cascadeOnDelete();
+
+            $table->foreignId('company_id')
+                ->constrained('companies')
+                ->cascadeOnDelete();
+
+            $table->decimal('price', 10, 2)->nullable();
+            $table->string('packsize')->nullable();
+            $table->string('form')->nullable();
+            $table->string('strength')->nullable();
+
             $table->timestamps();
         });
     }
