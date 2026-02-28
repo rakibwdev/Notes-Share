@@ -13,6 +13,23 @@ return new class extends Migration
     {
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+            $table->foreignId('brand_id')
+                ->constrained('brands')
+                ->cascadeOnDelete();
+
+            $table->foreignId('unit_id')
+                ->constrained('units')
+                ->cascadeOnDelete();
+
+            $table->unsignedInteger('quantity')->default(1);
+
+            $table->decimal('price', 10, 2)->nullable();
+
             $table->timestamps();
         });
     }
