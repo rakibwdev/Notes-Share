@@ -5,13 +5,13 @@ use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\Api\BrandController;
 // use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CompanyController;
-use App\Http\Controllers\GenericController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\UnitController;
-use App\Http\Controllers\BrandUnitController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\OccupationController;
+use App\Http\Controllers\Api\GenericController;
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\BrandUnitController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\BookmarkController;
+use App\Http\Controllers\Api\OccupationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
