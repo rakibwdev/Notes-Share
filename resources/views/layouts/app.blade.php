@@ -3,68 +3,89 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Pharmacy Store') }}</title>
+    <title>{{ config('app.name', 'MedStore BD') }} - Online Pharmacy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased text-gray-900" x-data="{ mobileMenuOpen: false }">
+<body class="bg-white text-slate-900 antialiased" x-data="{ mobileMenu: false }">
+    <!-- Announcement Bar -->
+    <div class="bg-indigo-600 text-white py-2 text-center text-[10px] font-black uppercase tracking-[0.2em]">
+        Free Delivery on orders over ৳1000 — Dhaka Only
+    </div>
+
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="/" class="flex-shrink-0 flex items-center gap-2">
-                        <span class="text-2xl">💊</span>
-                        <span class="text-xl font-bold text-blue-900 tracking-tight hidden sm:block">MedStore BD</span>
-                    </a>
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-100">💊</div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none">MedStore<span class="text-indigo-600">BD</span></span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Healthcare</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="{{ route('products.index') }}" class="text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors">Medicine</a>
+                    <a href="#" class="text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors">Healthcare</a>
+                    <a href="#" class="text-sm font-bold text-slate-600 hover:text-indigo-600 transition-colors">About Us</a>
                 </div>
 
-                <!-- Search Bar (Desktop) -->
-                <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-                    <form action="{{ route('products.index') }}" method="GET" class="w-full relative">
-                        <input type="text" name="search" placeholder="Search medicine, generic..." class="w-full bg-gray-100 border-transparent rounded-full py-2 px-4 pl-10 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-                        <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
-                    </form>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('cart.index') }}" class="relative p-2 text-gray-600 hover:text-blue-600 transition-colors">
-                        <span class="text-2xl">🛒</span>
+                <!-- Actions -->
+                <div class="flex items-center gap-2 sm:gap-6">
+                    <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-600 hover:text-indigo-600 transition-colors group">
+                        <span class="text-2xl italic">🛒</span>
                         @if(session('cart') && count(session('cart')) > 0)
-                            <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white">
+                            <span class="absolute -top-1 -right-1 bg-indigo-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full ring-4 ring-white">
                                 {{ count(session('cart')) }}
                             </span>
                         @endif
                     </a>
-                    
+
+                    <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+
                     @auth
-                        <a href="{{ route('profile') }}" class="hidden sm:block text-sm font-bold text-gray-700 hover:text-blue-600">My Account</a>
+                        <a href="{{ route('profile') }}" class="hidden sm:flex items-center gap-2 text-sm font-black text-indigo-950 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                            <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">👤</span>
+                            Account
+                        </a>
                     @else
-                        <a href="{{ route('login') }}" class="hidden sm:block text-sm font-bold text-gray-700 hover:text-blue-600">Login</a>
-                        <a href="{{ route('register') }}" class="hidden sm:block bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition-all">Register</a>
+                        <a href="{{ route('login') }}" class="hidden sm:block text-sm font-black text-indigo-950 hover:text-indigo-600 transition-colors uppercase tracking-widest">Login</a>
+                        <a href="{{ route('register') }}" class="hidden sm:block bg-indigo-600 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100">Sign Up</a>
                     @endauth
 
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-gray-600">
-                        <span x-show="!mobileMenuOpen">☰</span>
-                        <span x-show="mobileMenuOpen">✕</span>
+                    <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-xl">
+                        <span class="text-2xl" x-show="!mobileMenu">☰</span>
+                        <span class="text-2xl" x-show="mobileMenu">✕</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" class="md:hidden bg-white border-t border-gray-100 p-4 space-y-4 shadow-xl">
-            <form action="{{ route('products.index') }}" method="GET" class="relative">
-                <input type="text" name="search" placeholder="Search..." class="w-full bg-gray-100 border-transparent rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-500">
-            </form>
-            <div class="grid grid-cols-2 gap-4">
-                <a href="{{ route('products.index') }}" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg text-sm font-bold">📂 Catalog</a>
-                <a href="{{ route('cart.index') }}" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg text-sm font-bold">🛒 Cart</a>
+        <!-- Mobile Nav -->
+        <div x-show="mobileMenu" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="lg:hidden bg-white border-t border-slate-100 p-6 space-y-6 shadow-2xl">
+            <div class="space-y-4">
+                <a href="{{ route('products.index') }}" class="block text-lg font-black text-slate-900 tracking-tight">Medicine Catalog</a>
+                <a href="#" class="block text-lg font-black text-slate-900 tracking-tight">Daily Healthcare</a>
+                <a href="{{ route('cart.index') }}" class="block text-lg font-black text-slate-900 tracking-tight">Shopping Cart</a>
             </div>
             @guest
-                <a href="{{ route('login') }}" class="block w-full text-center py-3 border border-blue-600 text-blue-600 rounded-lg font-bold">Login</a>
-                <a href="{{ route('register') }}" class="block w-full text-center py-3 bg-blue-600 text-white rounded-lg font-bold">Create Account</a>
+            <div class="grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+                <a href="{{ route('login') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-indigo-950 border border-indigo-950 rounded-2xl">Login</a>
+                <a href="{{ route('register') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-white bg-indigo-600 rounded-2xl">Sign Up</a>
+            </div>
             @endguest
         </div>
     </nav>
@@ -74,41 +95,69 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white mt-12 py-12">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="space-y-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">💊</span>
-                    <span class="text-xl font-bold tracking-tight">MedStore BD</span>
+    <!-- Premium Footer -->
+    <footer class="bg-slate-950 text-white mt-32 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
+        <div class="max-w-7xl mx-auto px-4 py-24 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+                <div class="space-y-8 text-center md:text-left">
+                    <div class="flex items-center gap-2 justify-center md:justify-start">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl">💊</div>
+                        <span class="text-2xl font-black tracking-tighter uppercase italic">MedStore<span class="text-indigo-500">BD</span></span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
+                        Bangladesh's most trusted digital pharmacy. Dedicated to bringing healthcare accessibility to every doorstep with authenticity guaranteed.
+                    </p>
+                    <div class="flex gap-4 justify-center md:justify-start">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 transition-colors text-xl">f</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 transition-colors text-xl">t</a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 hover:border-indigo-500 transition-colors text-xl">i</a>
+                    </div>
                 </div>
-                <p class="text-blue-200 text-sm">Reliable pharmaceutical marketplace in Bangladesh. Delivering health to your doorstep.</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest">Quick Links</h4>
-                <ul class="text-blue-200 text-sm space-y-2">
-                    <li><a href="{{ route('products.index') }}" class="hover:text-white">Shop Medicines</a></li>
-                    <li><a href="#" class="hover:text-white">Track Order</a></li>
-                    <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest">Help Line</h4>
-                <ul class="text-blue-200 text-sm space-y-2">
-                    <li>📞 +880 1234 567 890</li>
-                    <li>✉️ support@medstore.com</li>
-                    <li>🕒 24/7 Available</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 uppercase text-xs tracking-widest">Payment Methods</h4>
-                <div class="flex gap-2 text-2xl">
-                    <span>💳</span> <span>💵</span> <span>📱</span>
+
+                <div class="text-center md:text-left">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500 mb-8">Navigation</h4>
+                    <ul class="space-y-4 text-slate-400 text-sm font-medium uppercase tracking-widest">
+                        <li><a href="{{ route('products.index') }}" class="hover:text-white transition-colors">Catalog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Health Tips</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Prescriptions</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500 mb-8">Helpline</h4>
+                    <ul class="space-y-6 text-slate-400 text-sm">
+                        <li class="flex flex-col">
+                            <span class="text-[10px] font-black uppercase tracking-tighter mb-1 opacity-40 italic">Phone Support</span>
+                            <span class="text-xl font-black text-white">+880 1234 567 890</span>
+                        </li>
+                        <li class="flex flex-col">
+                            <span class="text-[10px] font-black uppercase tracking-tighter mb-1 opacity-40 italic">Email Us</span>
+                            <span class="text-lg font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">support@medstore.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900/50 p-8 rounded-3xl border border-slate-800 text-center space-y-6">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-white">Verified Secure</h4>
+                    <div class="flex justify-center gap-4 text-3xl opacity-50">
+                        <span>💳</span><span>📱</span><span>💵</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase leading-relaxed tracking-tighter">Certified by the Drug Administration of Bangladesh</p>
                 </div>
             </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 border-t border-blue-800 mt-12 pt-8 text-center text-blue-400 text-xs">
-            © {{ date('Y') }} MedStore Bangladesh. All rights reserved.
+
+            <div class="mt-24 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-center">
+                <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest italic">
+                    © {{ date('Y') }} MedStore Bangladesh — Built for excellence
+                </p>
+                <div class="flex gap-8 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                    <a href="#" class="hover:text-white">Privacy</a>
+                    <a href="#" class="hover:text-white">Terms</a>
+                    <a href="#" class="hover:text-white">Cookies</a>
+                </div>
+            </div>
         </div>
     </footer>
 </body>

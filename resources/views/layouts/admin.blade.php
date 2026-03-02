@@ -3,63 +3,119 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard - Pharmacy Management</title>
+    <title>Admin Panel | {{ config('app.name') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased">
-    <div class="min-h-screen flex">
+<body class="bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+    <div class="min-h-screen flex overflow-hidden">
+        <!-- Mobile Sidebar Overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-linear duration-300"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="sidebarOpen = false"
+             class="fixed inset-0 bg-slate-900/60 z-40 lg:hidden backdrop-blur-sm"></div>
+
         <!-- Sidebar -->
-        <aside class="bg-blue-900 text-white w-64 flex-shrink-0 flex flex-col hidden md:flex">
-            <div class="p-6 text-xl font-bold border-b border-blue-800">
-                Pharmacy Admin
-            </div>
-            <nav class="flex-grow py-4">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">📊</span> Dashboard
-                </a>
-                <a href="{{ route('admin.products.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.products.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">📦</span> Medicines
-                </a>
-                <a href="{{ route('admin.batches.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.batches.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">🔢</span> Batches & Expiry
-                </a>
-                <a href="{{ route('admin.categories.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.categories.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">🏷️</span> Categories
-                </a>
-                <a href="{{ route('admin.orders.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.orders.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">🛒</span> Orders
-                </a>
-                <a href="{{ route('admin.customers.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.customers.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">👥</span> Customers
-                </a>
-                <a href="{{ route('admin.delivery.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.delivery.*') ? 'bg-blue-800' : '' }}">
-                    <span class="mr-3">🚚</span> Delivery Staff
-                </a>
-                <a href="#" class="flex items-center px-6 py-3 hover:bg-blue-800 border-t border-blue-800 mt-4">
-                    <span class="mr-3">⚙️</span> Settings
-                </a>
-            </nav>
-            <div class="p-4 border-t border-blue-800 text-sm text-blue-300">
-                v1.0.0
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+               class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex-shrink-0">
+            <div class="h-full flex flex-col">
+                <!-- Logo -->
+                <div class="h-20 flex items-center px-8 border-b border-slate-100">
+                    <span class="text-2xl mr-2">🏥</span>
+                    <span class="text-xl font-black tracking-tighter text-indigo-950 uppercase">MedStore <span class="text-indigo-600">Admin</span></span>
+                </div>
+
+                <!-- Nav -->
+                <nav class="flex-grow p-6 space-y-1.5 overflow-y-auto">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Core Management</p>
+                    
+                    @php
+                        $links = [
+                            ['route' => 'admin.dashboard', 'icon' => '📊', 'label' => 'Overview'],
+                            ['route' => 'admin.products.index', 'icon' => '📦', 'label' => 'Medicines'],
+                            ['route' => 'admin.batches.index', 'icon' => '🔢', 'label' => 'Inventory'],
+                            ['route' => 'admin.categories.index', 'icon' => '🏷️', 'label' => 'Categories'],
+                            ['route' => 'admin.orders.index', 'icon' => '🛒', 'label' => 'Sales Orders'],
+                            ['route' => 'admin.customers.index', 'icon' => '👥', 'label' => 'Customers'],
+                            ['route' => 'admin.delivery.index', 'icon' => '🚚', 'label' => 'Delivery Staff'],
+                        ];
+                    @endphp
+
+                    @foreach($links as $link)
+                    <a href="{{ route($link['route']) }}" 
+                       class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs($link['route'] . '*') ? 'bg-indigo-50 text-indigo-700 font-bold shadow-sm shadow-indigo-100' : 'text-slate-600 hover:bg-slate-50' }}">
+                        <span class="text-xl mr-3 opacity-80 group-hover:scale-110 transition-transform">{{ $link['icon'] }}</span>
+                        <span class="text-sm tracking-tight">{{ $link['label'] }}</span>
+                    </a>
+                    @endforeach
+
+                    <div class="pt-8 mt-8 border-t border-slate-100">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">System</p>
+                        <a href="#" class="flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">
+                            <span class="text-xl mr-3">⚙️</span>
+                            <span class="text-sm">Settings</span>
+                        </a>
+                        <a href="/" class="flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">
+                            <span class="text-xl mr-3">🌐</span>
+                            <span class="text-sm">Live Site</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">A</div>
+                        <div class="flex-grow">
+                            <div class="text-xs font-black text-slate-900">Admin User</div>
+                            <div class="text-[10px] text-slate-500 uppercase tracking-tighter">Super Administrator</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-grow flex flex-col">
+        <!-- Main Wrapper -->
+        <div class="flex-grow flex flex-col min-w-0">
             <!-- Header -->
-            <header class="bg-white shadow h-16 flex items-center justify-between px-8">
-                <h2 class="text-xl font-semibold text-gray-800">@yield('title', 'Admin Panel')</h2>
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 sticky top-0 z-30">
                 <div class="flex items-center gap-4">
-                    <span class="text-gray-600">Admin User</span>
-                    <button class="bg-gray-200 p-2 rounded-full hover:bg-gray-300">👤</button>
+                    <button @click="sidebarOpen = true" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                    <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight uppercase">@yield('title', 'Admin Panel')</h2>
+                </div>
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button class="hidden sm:flex p-2 text-slate-400 hover:text-indigo-600 transition-colors relative">
+                        <span class="text-xl">🔔</span>
+                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                    <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                    <form action="#" method="POST">
+                        @csrf
+                        <button type="submit" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-red-600 transition-colors">Sign Out</button>
+                    </form>
                 </div>
             </header>
 
-            <!-- Content -->
-            <div class="p-8 flex-grow">
-                @yield('content')
-            </div>
-        </main>
+            <!-- Main Content Area -->
+            <main class="flex-grow overflow-y-auto p-4 sm:p-8">
+                <div class="max-w-7xl mx-auto space-y-8">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 </html>

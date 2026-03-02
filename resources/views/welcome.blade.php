@@ -1,105 +1,151 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Hero / Banners -->
-<div class="relative bg-blue-50 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-12">
-            <div class="space-y-6 text-center md:text-left">
-                <h1 class="text-4xl md:text-6xl font-black text-blue-900 leading-tight">Your Trusted Online <span class="text-blue-600">Pharmacy</span></h1>
-                <p class="text-lg text-gray-600">Get authentic medicines delivered at your doorstep across Bangladesh. Safe, fast, and reliable.</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="{{ route('products.index') }}" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 text-center">Shop Now</a>
-                    <a href="#" class="bg-white text-blue-900 border border-blue-100 px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all text-center">Upload Prescription</a>
+<!-- Premium Hero -->
+<div class="relative bg-white pt-16 pb-32 overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-50 -skew-x-12 translate-x-24 hidden lg:block"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+            <div class="space-y-10 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest animate-bounce">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    Now Delivering Nationwide
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+                    Healthcare <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Reimagined.</span>
+                </h1>
+                <p class="text-lg text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium italic">
+                    Order authentic medicines and healthcare essentials from the safety of your home. Verified by professional pharmacists.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="{{ route('products.index') }}" class="bg-slate-900 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-100 flex items-center justify-center gap-2 group">
+                        Start Shopping
+                        <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                    <a href="#" class="bg-white text-slate-900 border border-slate-200 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                        <span>📄</span> Upload Rx
+                    </a>
+                </div>
+                <div class="flex items-center gap-8 justify-center lg:justify-start pt-4">
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-black text-slate-900 leading-none tracking-tighter">10k+</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Users</span>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200"></div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-black text-slate-900 leading-none tracking-tighter">100%</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Authentic</span>
+                    </div>
                 </div>
             </div>
-            <div class="hidden md:block relative">
-                <div class="absolute inset-0 bg-blue-200 rounded-full blur-3xl opacity-30 transform -translate-y-12"></div>
-                <img src="https://img.freepik.com/free-photo/pharmacist-working-pharmacy-drugstore_23-2148906306.jpg" class="relative rounded-3xl shadow-2xl border-8 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500" alt="Pharmacy">
+            <div class="relative hidden lg:block">
+                <div class="absolute -top-20 -right-20 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+                <img src="https://img.freepik.com/free-photo/pharmacist-giving-medicine-customer-pharmacy_23-2148892589.jpg" 
+                     class="relative w-full rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[12px] border-white transform hover:scale-[1.02] transition-transform duration-700" 
+                     alt="MedStore Hero">
             </div>
         </div>
     </div>
 </div>
 
-<!-- Categories -->
-<div class="max-w-7xl mx-auto px-4 mt-16">
-    <h2 class="text-2xl font-black text-gray-900 mb-8 border-l-4 border-blue-600 pl-4 uppercase tracking-wider text-sm">Browse by Category</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        @foreach($categories as $category)
-        <a href="{{ route('products.index', ['category_id' => $category->id]) }}" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-center group">
-            <div class="text-3xl mb-3 transform group-hover:scale-110 transition-transform">💊</div>
-            <div class="font-bold text-gray-800 text-sm">{{ $category->name }}</div>
-        </a>
-        @endforeach
+<!-- Refined Categories -->
+<div class="max-w-7xl mx-auto px-4 -mt-16 relative z-20">
+    <div class="bg-white/80 backdrop-blur-2xl p-10 rounded-[3rem] shadow-xl shadow-slate-200/50 border border-white">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+            <div>
+                <h2 class="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-2 text-center md:text-left">Categories</h2>
+                <p class="text-2xl font-black text-slate-900 tracking-tighter text-center md:text-left">Browse by Healthcare Need</p>
+            </div>
+            <a href="{{ route('products.index') }}" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">View All Categories →</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            @foreach($categories as $category)
+            <a href="{{ route('products.index', ['category_id' => $category->id]) }}" 
+               class="flex flex-col items-center p-6 bg-slate-50/50 rounded-[2rem] border border-transparent hover:border-indigo-100 hover:bg-white hover:shadow-xl hover:shadow-indigo-50/50 transition-all duration-300 group">
+                <div class="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">💊</div>
+                <span class="text-sm font-black text-slate-900 tracking-tight text-center">{{ $category->name }}</span>
+            </a>
+            @endforeach
+        </div>
     </div>
 </div>
 
-<!-- Featured Products -->
-<div class="max-w-7xl mx-auto px-4 mt-20">
-    <div class="flex justify-between items-end mb-10">
-        <div>
-            <h2 class="text-2xl font-black text-gray-900 uppercase tracking-wider text-sm border-l-4 border-blue-600 pl-4 mb-2">New Arrivals</h2>
-            <p class="text-gray-500 text-sm">Recently added authentic medications</p>
+<!-- Featured Products Section -->
+<div class="max-w-7xl mx-auto px-4 mt-32">
+    <div class="flex flex-col md:flex-row justify-between items-end gap-4 mb-16">
+        <div class="max-w-md">
+            <h2 class="text-[10px] font-black text-indigo-600 uppercase tracking-[0.4em] mb-4">Latest Arrivals</h2>
+            <p class="text-4xl font-black text-slate-900 tracking-tighter leading-tight">Authentic Medicines for Your Family</p>
         </div>
-        <a href="{{ route('products.index') }}" class="text-blue-600 font-bold text-sm hover:underline">View All →</a>
+        <a href="{{ route('products.index') }}" class="bg-slate-100 text-slate-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">Explore Full Catalog</a>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         @foreach($featured_products as $product)
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all group flex flex-col">
-            <a href="{{ route('products.show', $product) }}" class="relative aspect-square bg-gray-50 overflow-hidden block">
+        <div class="group relative flex flex-col h-full">
+            <div class="relative bg-slate-50 rounded-[2.5rem] p-8 aspect-square overflow-hidden mb-6 group-hover:bg-white group-hover:shadow-2xl group-hover:shadow-indigo-100/50 transition-all duration-500">
                 @if($product->primaryImage)
-                    <img src="{{ $product->primaryImage->image_url }}" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" alt="{{ $product->name }}">
+                    <img src="{{ $product->primaryImage->image_url }}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700" alt="{{ $product->name }}">
                 @else
-                    <div class="w-full h-full flex items-center justify-center text-6xl opacity-20 grayscale">💊</div>
+                    <div class="w-full h-full flex items-center justify-center text-7xl opacity-10">💊</div>
                 @endif
-                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-blue-900 shadow-sm border border-gray-100">In Stock</div>
-            </a>
-            <div class="p-4 md:p-6 flex-grow flex flex-col">
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{{ $product->category->name }}</div>
-                <a href="{{ route('products.show', $product) }}" class="font-bold text-gray-900 md:text-lg mb-1 hover:text-blue-600 truncate block">{{ $product->name }}</a>
-                <div class="text-xs text-gray-500 italic mb-4 truncate">{{ $product->generic_name }}</div>
-                
-                <div class="mt-auto flex items-center justify-between gap-2">
-                    @php
-                        $price = $product->batches->sortBy('selling_price')->first()->selling_price ?? 0;
-                    @endphp
-                    <div class="text-lg md:text-2xl font-black text-blue-900">৳{{ number_format($price, 2) }}</div>
+                <div class="absolute top-6 right-6 flex flex-col gap-2">
+                    <button class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-xl hover:bg-rose-50 hover:text-rose-500 transition-colors">♥</button>
+                </div>
+                <div class="absolute bottom-6 left-6 right-6 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
                     <form action="{{ route('cart.add', $product) }}" method="POST">
                         @csrf
-                        <button type="submit" class="bg-blue-600 text-white p-2 md:p-3 rounded-2xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-100">
-                            <span class="md:hidden">🛒</span>
-                            <span class="hidden md:inline text-xs font-bold px-2 uppercase tracking-widest">Add to Cart</span>
-                        </button>
+                        <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 shadow-xl transition-all">Quick Add to Cart</button>
                     </form>
                 </div>
             </div>
+            
+            <div class="px-2 flex-grow flex flex-col">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest italic">{{ $product->category->name }}</p>
+                        <a href="{{ route('products.show', $product) }}" class="text-xl font-black text-slate-900 hover:text-indigo-600 transition-colors tracking-tighter leading-tight block">
+                            {{ $product->name }}
+                        </a>
+                    </div>
+                    @php
+                        $price = $product->batches->sortBy('selling_price')->first()->selling_price ?? 0;
+                    @endphp
+                    <div class="text-xl font-black text-slate-900 tracking-tighter">৳{{ number_format($price, 0) }}</div>
+                </div>
+                <p class="text-sm text-slate-400 font-medium italic mb-4">{{ $product->generic_name }}</p>
+            </div>
         </div>
         @endforeach
     </div>
 </div>
 
-<!-- Features Section -->
-<div class="max-w-7xl mx-auto px-4 mt-32 mb-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="flex items-start gap-4 p-8 bg-blue-900 rounded-3xl text-white shadow-2xl">
-        <span class="text-4xl">🚚</span>
-        <div>
-            <h4 class="font-bold text-lg mb-1">Same Day Delivery</h4>
-            <p class="text-blue-200 text-sm">In selected cities including Dhaka and Chittagong.</p>
-        </div>
-    </div>
-    <div class="flex items-start gap-4 p-8 bg-white rounded-3xl border border-gray-100 shadow-xl">
-        <span class="text-4xl text-blue-600">🛡️</span>
-        <div>
-            <h4 class="font-bold text-lg mb-1 text-gray-900">100% Authentic</h4>
-            <p class="text-gray-500 text-sm">Directly sourced from top pharmaceutical companies.</p>
-        </div>
-    </div>
-    <div class="flex items-start gap-4 p-8 bg-white rounded-3xl border border-gray-100 shadow-xl">
-        <span class="text-4xl text-blue-600">📞</span>
-        <div>
-            <h4 class="font-bold text-lg mb-1 text-gray-900">Pharmacist Support</h4>
-            <p class="text-gray-500 text-sm">Professional advice available 24/7 for your needs.</p>
+<!-- Trust Strip -->
+<div class="bg-indigo-950 mt-40 py-20 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
+         style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
+            <div class="space-y-4">
+                <div class="text-4xl mb-6">🚚</div>
+                <h4 class="text-xl font-black text-white tracking-tight italic">Fastest Home Delivery</h4>
+                <p class="text-indigo-300 text-sm leading-relaxed max-w-xs mx-auto">Get your essential medicines delivered in as little as 4 hours within Dhaka city.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="text-4xl mb-6">🔬</div>
+                <h4 class="text-xl font-black text-white tracking-tight italic">Pharmacist Verified</h4>
+                <p class="text-indigo-300 text-sm leading-relaxed max-w-xs mx-auto">Every order is checked by our licensed pharmacists to ensure accuracy and safety.</p>
+            </div>
+            <div class="space-y-4">
+                <div class="text-4xl mb-6">🔒</div>
+                <h4 class="text-xl font-black text-white tracking-tight italic">100% Authentic Products</h4>
+                <p class="text-indigo-300 text-sm leading-relaxed max-w-xs mx-auto">We source directly from manufacturers like Beximco, Square, and Incepta.</p>
+            </div>
         </div>
     </div>
 </div>
