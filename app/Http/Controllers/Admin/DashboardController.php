@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\Product;
 use App\Models\Batch;
 use App\Models\Customer;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -18,7 +18,7 @@ class DashboardController extends Controller
             'total_orders' => Order::count(),
             'total_products' => Product::count(),
             'total_customers' => Customer::count(),
-            'low_stock_count' => Product::all()->filter(fn($p) => $p->total_stock < 10)->count(),
+            'low_stock_count' => Product::all()->filter(fn ($p) => $p->total_stock < 10)->count(),
             'expired_stock_count' => Batch::where('expiry_date', '<', now())->count(),
         ];
 

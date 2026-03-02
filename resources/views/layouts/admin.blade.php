@@ -17,14 +17,23 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-800' : '' }}">
                     <span class="mr-3">📊</span> Dashboard
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 hover:bg-blue-800">
-                    <span class="mr-3">📦</span> Inventory
+                <a href="{{ route('admin.products.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.products.*') ? 'bg-blue-800' : '' }}">
+                    <span class="mr-3">📦</span> Medicines
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 hover:bg-blue-800">
+                <a href="{{ route('admin.batches.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.batches.*') ? 'bg-blue-800' : '' }}">
+                    <span class="mr-3">🔢</span> Batches & Expiry
+                </a>
+                <a href="{{ route('admin.categories.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.categories.*') ? 'bg-blue-800' : '' }}">
+                    <span class="mr-3">🏷️</span> Categories
+                </a>
+                <a href="{{ route('admin.orders.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.orders.*') ? 'bg-blue-800' : '' }}">
                     <span class="mr-3">🛒</span> Orders
                 </a>
-                <a href="#" class="flex items-center px-6 py-3 hover:bg-blue-800">
+                <a href="{{ route('admin.customers.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.customers.*') ? 'bg-blue-800' : '' }}">
                     <span class="mr-3">👥</span> Customers
+                </a>
+                <a href="{{ route('admin.delivery.index') }}" class="flex items-center px-6 py-3 hover:bg-blue-800 {{ request()->routeIs('admin.delivery.*') ? 'bg-blue-800' : '' }}">
+                    <span class="mr-3">🚚</span> Delivery Staff
                 </a>
                 <a href="#" class="flex items-center px-6 py-3 hover:bg-blue-800 border-t border-blue-800 mt-4">
                     <span class="mr-3">⚙️</span> Settings
