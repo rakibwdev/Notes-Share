@@ -3,64 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreOrderItemRequest;
+use App\Http\Requests\Api\UpdateOrderItemRequest;
 use App\Models\OrderItem;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class OrderItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $orderItems = OrderItem::with(['order', 'brand', 'unit'])->latest()->paginate(10);
+
+        return response()->json($orderItems);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreOrderItemRequest $request): JsonResponse
     {
-        //
+        $orderItem = OrderItem::create($request->validated());
+
+        return response()->json($orderItem, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(OrderItem $orderItem): JsonResponse
     {
-        //
+        return response()->json($orderItem->load(['order', 'brand', 'unit']));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(OrderItem $orderItem)
+    public function update(UpdateOrderItemRequest $request, OrderItem $orderItem): JsonResponse
     {
-        //
+        $orderItem->update($request->validated());
+
+        return response()->json($orderItem);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(OrderItem $orderItem)
+    public function destroy(OrderItem $orderItem): JsonResponse
     {
-        //
-    }
+        $orderItem->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, OrderItem $orderItem)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(OrderItem $orderItem)
-    {
-        //
+        return response()->json(['message' => 'Order item deleted successfully']);
     }
 }

@@ -3,83 +3,41 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreCompanyRequest;
+use App\Http\Requests\Api\UpdateCompanyRequest;
 use App\Models\Company;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CompanyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        return Company::latest()->paginate(10);
+        return response()->json(Company::latest()->paginate(10));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreCompanyRequest $request): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|unique:companies,name'
-        ]);
-
-        $company = Company::create([
-            'name' => $request->name
-        ]);
+        $company = Company::create($request->validated());
 
         return response()->json($company, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Company $company)
+    public function show(Company $company): JsonResponse
     {
-        //
+        return response()->json($company);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $company = Company::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|unique:companies,name,' . $id
-        ]);
-
-        $company->update([
-            'name' => $request->name
-        ]);
+        $company->update($request->validated());
 
         return response()->json($company);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy(Company $company): JsonResponse
     {
-        Company::findOrFail($id)->delete();
-        return response()->json(['message' => 'Deleted successfully']);
+        $company->delete();
+
+        return response()->json(['message' => 'Company deleted successfully']);
     }
 }

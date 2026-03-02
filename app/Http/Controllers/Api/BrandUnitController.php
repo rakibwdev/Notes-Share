@@ -3,64 +3,43 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreBrandUnitRequest;
+use App\Http\Requests\Api\UpdateBrandUnitRequest;
 use App\Models\BrandUnit;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class BrandUnitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $brandUnits = BrandUnit::with(['brand', 'unit', 'user'])->latest()->paginate(10);
+
+        return response()->json($brandUnits);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreBrandUnitRequest $request): JsonResponse
     {
-        //
+        $brandUnit = BrandUnit::create($request->validated());
+
+        return response()->json($brandUnit, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(BrandUnit $brandunit): JsonResponse
     {
-        //
+        return response()->json($brandunit->load(['brand', 'unit', 'user']));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(BrandUnit $brandUnit)
+    public function update(UpdateBrandUnitRequest $request, BrandUnit $brandunit): JsonResponse
     {
-        //
+        $brandunit->update($request->validated());
+
+        return response()->json($brandunit);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BrandUnit $brandUnit)
+    public function destroy(BrandUnit $brandunit): JsonResponse
     {
-        //
-    }
+        $brandunit->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, BrandUnit $brandUnit)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(BrandUnit $brandUnit)
-    {
-        //
+        return response()->json(['message' => 'BrandUnit deleted successfully']);
     }
 }

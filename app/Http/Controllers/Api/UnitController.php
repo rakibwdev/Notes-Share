@@ -3,64 +3,41 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreUnitRequest;
+use App\Http\Requests\Api\UpdateUnitRequest;
 use App\Models\Unit;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class UnitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(Unit::latest()->paginate(10));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreUnitRequest $request): JsonResponse
     {
-        //
+        $unit = Unit::create($request->validated());
+
+        return response()->json($unit, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Unit $unit): JsonResponse
     {
-        //
+        return response()->json($unit);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit): JsonResponse
     {
-        //
+        $unit->update($request->validated());
+
+        return response()->json($unit);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Unit $unit)
+    public function destroy(Unit $unit): JsonResponse
     {
-        //
-    }
+        $unit->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Unit $unit)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Unit $unit)
-    {
-        //
+        return response()->json(['message' => 'Unit deleted successfully']);
     }
 }

@@ -3,65 +3,58 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\Api\StoreBrandRequest;
+use App\Http\Requests\Api\UpdateBrandRequest;
 use App\Models\Brand;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
-    }
+        $brands = Brand::with(['generic', 'company'])->latest()->paginate(10);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response()->json($brands);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBrandRequest $request): JsonResponse
     {
-        //
+        $brand = Brand::create($request->validated());
+
+        return response()->json($brand, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Brand $brand)
+    public function show(Brand $brand): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Brand $brand)
-    {
-        //
+        return response()->json($brand->load(['generic', 'company']));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Brand $brand)
+    public function update(UpdateBrandRequest $request, Brand $brand): JsonResponse
     {
-        //
+        $brand->update($request->validated());
+
+        return response()->json($brand);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Brand $brand)
+    public function destroy(Brand $brand): JsonResponse
     {
-        //
+        $brand->delete();
+
+        return response()->json(['message' => 'Brand deleted successfully']);
     }
 }

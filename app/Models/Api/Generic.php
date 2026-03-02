@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Api;
 
+use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Company extends Model
+class Generic extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'generic_name',
+    ];
 
     public function brands(): HasMany
     {
