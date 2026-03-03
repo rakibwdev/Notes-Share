@@ -44,10 +44,21 @@ class CheckoutController extends Controller
 
         return DB::transaction(function () use ($validated, $cart) {
             // Find or create customer
-            $customer = Customer::firstOrCreate(
+            $customerData = ['name' => $validated['name'], 'address' => $validated['address']];
+            
+            if (auth()->check()) {
+                $customerData['user_id'] = auth()->id();
+            }
+
+            $customer = Customer::updateOrCreate(
                 ['phone' => $validated['phone']],
-                ['name' => $validated['name'], 'address' => $validated['address']]
+                $customerData
             );
+
+            // If user is logged in but the customer record wasn't linked yet, link it
+            if (auth()->check() && !$customer->user_id) {
+                $customer->update(['user_id' => auth()->id()]);
+            }
 
             $totalPrice = 0;
             foreach ($cart as $item) {
