@@ -6,7 +6,7 @@
 <div class="space-y-6">
     <div class="flex justify-between items-center">
         <h3 class="text-2xl font-bold text-gray-800">Batch Inventory</h3>
-        <a href="{{ route('admin.batches.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+        <a href="{{ route('admin.batches.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg p-1  font-bold hover:bg-blue-700 transition-colors">
             + Add Stock Batch
         </a>
     </div>
@@ -22,7 +22,7 @@
         <form action="{{ route('admin.batches.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product</label>
-                <select name="product_id" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <select name="product_id" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <option value="">All Products</option>
                     @foreach($products as $product)
                         <option value="{{ $product->id }}" {{ request('product_id') == $product->id ? 'selected' : '' }}>{{ $product->name }}</option>
@@ -31,14 +31,14 @@
             </div>
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status Filter</label>
-                <select name="filter" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <select name="filter" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <option value="">All Batches</option>
                     <option value="expired" {{ request('filter') == 'expired' ? 'selected' : '' }}>Expired Only</option>
                     <option value="expiring_soon" {{ request('filter') == 'expiring_soon' ? 'selected' : '' }}>Expiring Soon (60d)</option>
                 </select>
             </div>
             <div class="md:col-span-2 flex items-end">
-                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-bold hover:bg-gray-700 transition-colors text-sm w-full">Apply Filters</button>
+                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg p-1  font-bold hover:bg-gray-700 transition-colors text-sm w-full">Apply Filters</button>
             </div>
         </form>
     </div>

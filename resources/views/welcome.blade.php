@@ -105,7 +105,7 @@
                 </div>
             </div>
             
-            <div class="px-2 flex-grow flex flex-col">
+            <div class="px-2 grow flex flex-col">
                 <div class="flex justify-between items-start mb-2">
                     <div class="space-y-1">
                         <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest italic">{{ $product->category->name }}</p>

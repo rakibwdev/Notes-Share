@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-8">
     <div class="flex items-center gap-4">
-        <a href="{{ route('admin.orders.index') }}" class="bg-white p-2 rounded-lg border border-gray-200 text-gray-500 hover:text-gray-800">⬅️</a>
+        <a href="{{ route('admin.orders.index') }}" class="bg-white p-2 rounded-lg p-1  border border-gray-200 text-gray-500 hover:text-gray-800">⬅️</a>
         <h3 class="text-2xl font-bold text-gray-800">Invoice Details</h3>
     </div>
 
@@ -70,7 +70,7 @@
                     
                     <div class="space-y-2">
                         <label class="block text-[10px] font-bold text-gray-500 uppercase">Update Status</label>
-                        <select name="status" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm font-bold {{ $order->status === 'Delivered' ? 'text-green-600' : ($order->status === 'Cancelled' ? 'text-red-600' : 'text-blue-600') }}">
+                        <select name="status" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm font-bold {{ $order->status === 'Delivered' ? 'text-green-600' : ($order->status === 'Cancelled' ? 'text-red-600' : 'text-blue-600') }}">
                             <option value="Pending" {{ $order->status === 'Pending' ? 'selected' : '' }}>Pending</option>
                             <option value="Confirmed" {{ $order->status === 'Confirmed' ? 'selected' : '' }}>Confirmed</option>
                             <option value="Delivered" {{ $order->status === 'Delivered' ? 'selected' : '' }}>Delivered</option>
@@ -80,7 +80,7 @@
 
                     <div class="space-y-2">
                         <label class="block text-[10px] font-bold text-gray-500 uppercase">Assign Delivery Staff</label>
-                        <select name="delivery_man_id" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <select name="delivery_man_id" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
                             <option value="">Unassigned</option>
                             @foreach($delivery_men as $man)
                                 <option value="{{ $man->id }}" {{ $order->delivery_man_id == $man->id ? 'selected' : '' }}>{{ $man->name }} ({{ $man->phone }})</option>
@@ -88,7 +88,7 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-colors shadow-lg shadow-blue-100">
+                    <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg p-1  font-bold hover:bg-blue-800 transition-colors shadow-lg shadow-blue-100">
                         Apply Changes
                     </button>
                 </form>

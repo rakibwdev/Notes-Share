@@ -9,11 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+<body class="bg-slate-50 text-slate-900 antialiased font-sans" x-data="{ sidebarOpen: false }">
     <div class="min-h-screen flex overflow-hidden">
         <!-- Mobile Sidebar Overlay -->
         <div x-show="sidebarOpen" 
@@ -28,16 +25,16 @@
 
         <!-- Sidebar -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-               class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex-shrink-0">
+               class="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shrink-0">
             <div class="h-full flex flex-col">
                 <!-- Logo -->
                 <div class="h-20 flex items-center px-8 border-b border-slate-100">
                     <span class="text-2xl mr-2">🏥</span>
-                    <span class="text-xl font-black tracking-tighter text-indigo-950 uppercase">MedStore <span class="text-indigo-600">Admin</span></span>
+                    <span class="text-xl font-black tracking-tighter text-indigo-950 uppercase">Notes<span class="text-indigo-600">Share</span></span>
                 </div>
 
                 <!-- Nav -->
-                <nav class="flex-grow p-6 space-y-1.5 overflow-y-auto">
+                <nav class="grow p-6 space-y-1.5 overflow-y-auto">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Core Management</p>
                     
                     @php
@@ -76,7 +73,7 @@
                 <div class="p-6 border-t border-slate-100 bg-slate-50/50">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">A</div>
-                        <div class="flex-grow">
+                        <div class="grow">
                             <div class="text-xs font-black text-slate-900">Admin User</div>
                             <div class="text-[10px] text-slate-500 uppercase tracking-tighter">Super Administrator</div>
                         </div>
@@ -86,11 +83,11 @@
         </aside>
 
         <!-- Main Wrapper -->
-        <div class="flex-grow flex flex-col min-w-0">
+        <div class="grow flex flex-col min-w-0">
             <!-- Header -->
             <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-4 sm:px-8 sticky top-0 z-30">
                 <div class="flex items-center gap-4">
-                    <button @click="sidebarOpen = true" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                    <button @click="sidebarOpen = true" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg p-1 ">
                         <span class="text-2xl">☰</span>
                     </button>
                     <h2 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight uppercase">@yield('title', 'Admin Panel')</h2>
@@ -110,7 +107,7 @@
             </header>
 
             <!-- Main Content Area -->
-            <main class="flex-grow overflow-y-auto p-4 sm:p-8">
+            <main class="grow overflow-y-auto p-4 sm:p-8">
                 <div class="max-w-7xl mx-auto space-y-8">
                     @yield('content')
                 </div>

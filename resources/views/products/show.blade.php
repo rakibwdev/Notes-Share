@@ -32,7 +32,7 @@
                 </nav>
                 <h1 class="text-3xl md:text-5xl font-black text-gray-900 mb-2">{{ $product->name }}</h1>
                 <div class="text-lg md:text-xl text-blue-600 font-bold italic mb-4">{{ $product->generic_name }}</div>
-                <div class="inline-block bg-gray-100 px-3 py-1 rounded-lg text-sm font-bold text-gray-600 uppercase tracking-widest">
+                <div class="inline-block bg-gray-100 px-3 py-1 rounded-lg p-1  text-sm font-bold text-gray-600 uppercase tracking-widest">
                     {{ $product->manufacturer ?? 'Unknown Manufacturer' }}
                 </div>
             </div>
@@ -68,7 +68,7 @@
                         <input type="number" name="quantity" x-ref="qty" value="1" min="1" max="{{ $total_stock }}" class="w-16 bg-transparent border-none text-center font-black text-lg focus:ring-0">
                         <button type="button" @click="$refs.qty.value = Math.min({{ $total_stock }}, parseInt($refs.qty.value) + 1)" class="w-12 h-12 flex items-center justify-center font-bold text-gray-600 hover:text-blue-600">＋</button>
                     </div>
-                    <button type="submit" class="flex-grow bg-blue-600 text-white h-14 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 uppercase tracking-widest" @if($total_stock <= 0) disabled @endif>
+                    <button type="submit" class="grow bg-blue-600 text-white h-14 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 uppercase tracking-widest" @if($total_stock <= 0) disabled @endif>
                         Add to Cart
                     </button>
                 </div>

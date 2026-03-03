@@ -6,7 +6,7 @@
 <div class="space-y-6">
     <div class="flex justify-between items-center">
         <h3 class="text-2xl font-bold text-gray-800">Products List</h3>
-        <a href="{{ route('admin.products.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+        <a href="{{ route('admin.products.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg p-1  font-bold hover:bg-blue-700 transition-colors">
             + Add New Product
         </a>
     </div>
@@ -28,11 +28,11 @@
         <form action="{{ route('admin.products.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Product or Generic name..." class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Product or Generic name..." class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
             </div>
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category</label>
-                <select name="category_id" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <select name="category_id" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <option value="">All Categories</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -40,7 +40,7 @@
                 </select>
             </div>
             <div class="flex items-end">
-                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-bold hover:bg-gray-700 transition-colors text-sm w-full">Filter</button>
+                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg p-1  font-bold hover:bg-gray-700 transition-colors text-sm w-full">Filter</button>
             </div>
         </form>
     </div>
@@ -62,8 +62,19 @@
                 @forelse($products as $product)
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4">
-                        <div class="font-bold text-gray-900">{{ $product->name }}</div>
-                        <div class="text-gray-500 italic text-xs">{{ $product->generic_name }}</div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-50 rounded-lg border border-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                                @if($product->primaryImage)
+                                    <img src="{{ $product->primaryImage->image_url }}" class="w-full h-full object-contain" alt="IMG">
+                                @else
+                                    <span class="text-lg opacity-20">💊</span>
+                                @endif
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">{{ $product->name }}</div>
+                                <div class="text-gray-500 italic text-xs">{{ $product->generic_name }}</div>
+                            </div>
+                        </div>
                     </td>
                     <td class="px-6 py-4">
                         <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">{{ $product->category->name }}</span>

@@ -19,7 +19,7 @@
         <form action="{{ route('admin.orders.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
-                <select name="status" class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <select name="status" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm">
                     <option value="">All Statuses</option>
                     <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
                     <option value="Confirmed" {{ request('status') == 'Confirmed' ? 'selected' : '' }}>Confirmed</option>
@@ -28,8 +28,8 @@
                 </select>
             </div>
             <div class="md:col-span-2 flex items-end gap-2">
-                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-bold hover:bg-gray-700 transition-colors text-sm flex-grow">Filter Orders</button>
-                <a href="{{ route('admin.orders.index') }}" class="bg-gray-100 text-gray-600 px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors text-sm">Reset</a>
+                <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg p-1  font-bold hover:bg-gray-700 transition-colors text-sm grow">Filter Orders</button>
+                <a href="{{ route('admin.orders.index') }}" class="bg-gray-100 text-gray-600 px-6 py-2 rounded-lg p-1  font-bold hover:bg-gray-200 transition-colors text-sm">Reset</a>
             </div>
         </form>
     </div>

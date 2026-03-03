@@ -3,17 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'MedStore BD') }} - Online Pharmacy</title>
+    <title>{{ config('app.name', 'Notes Share') }} - Online Pharmacy</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    </style>
 </head>
-<body class="bg-white text-slate-900 antialiased" x-data="{ mobileMenu: false }">
+<body class="bg-white text-slate-900 antialiased font-sans" x-data="{ mobileMenu: false }">
     <!-- Announcement Bar -->
     <div class="bg-indigo-600 text-white py-2 text-center text-[10px] font-black uppercase tracking-[0.2em]">
         Free Delivery on orders over ৳1000 — Dhaka Only
@@ -27,8 +24,8 @@
                 <a href="/" class="flex items-center gap-2 group">
                     <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-100">💊</div>
                     <div class="flex flex-col">
-                        <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none">MedStore<span class="text-indigo-600">BD</span></span>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Healthcare</span>
+                        <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none">Notes<span class="text-indigo-600">Share</span></span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Online Pharmacy</span>
                     </div>
                 </a>
 

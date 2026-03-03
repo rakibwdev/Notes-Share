@@ -7,8 +7,8 @@
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
         <h3 class="font-bold text-gray-800">Customer Directory</h3>
         <form action="{{ route('admin.customers.index') }}" method="GET" class="flex gap-2">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Name or Phone..." class="border-gray-200 rounded-lg text-sm">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Search</button>
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Name or Phone..." class="border-gray-200 rounded-lg p-1  text-sm">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg p-1  text-sm font-bold">Search</button>
         </form>
     </div>
 

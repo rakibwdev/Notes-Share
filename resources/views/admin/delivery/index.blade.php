@@ -54,17 +54,17 @@
             @csrf
             <div>
                 <label class="block text-[10px] font-bold text-gray-500 uppercase">Staff Name</label>
-                <input type="text" name="name" required class="w-full border-gray-200 rounded-lg text-sm" placeholder="Full Name">
+                <input type="text" name="name" required class="w-full border-gray-200 rounded-lg p-1  text-sm" placeholder="Full Name">
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-gray-500 uppercase">Phone Number</label>
-                <input type="text" name="phone" required class="w-full border-gray-200 rounded-lg text-sm font-mono" placeholder="+8801...">
+                <input type="text" name="phone" required class="w-full border-gray-200 rounded-lg p-1  text-sm font-mono" placeholder="+8801...">
             </div>
             <div class="flex items-center gap-2 pt-2">
                 <input type="checkbox" name="status" value="1" checked id="status_man" class="rounded text-blue-600 focus:ring-blue-500 border-gray-300">
                 <label for="status_man" class="text-[10px] font-bold text-gray-600 uppercase cursor-pointer tracking-tighter">Active Status</label>
             </div>
-            <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition-colors text-xs uppercase tracking-widest">Register Staff</button>
+            <button type="submit" class="w-full bg-blue-900 text-white py-3 rounded-lg p-1  font-bold hover:bg-blue-800 transition-colors text-xs uppercase tracking-widest">Register Staff</button>
         </form>
     </div>
 </div>

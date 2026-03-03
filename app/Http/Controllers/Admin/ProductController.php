@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Product::with(['category', 'batches']);
+        $query = Product::with(['category', 'batches', 'primaryImage']);
 
         if ($request->search) {
             $query->where('name', 'like', "%{$request->search}%")
@@ -46,15 +48,26 @@ class ProductController extends Controller
             'manufacturer' => 'nullable|string|max:200',
             'description' => 'nullable|string',
             'status' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Product::create($validated);
+        $product = Product::create($validated);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_url' => Storage::url($path),
+                'is_primary' => true,
+            ]);
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product): View
     {
+        $product->load('primaryImage');
         $categories = Category::all();
 
         return view('admin.inventory.products.edit', compact('product', 'categories'));
@@ -69,9 +82,27 @@ class ProductController extends Controller
             'manufacturer' => 'nullable|string|max:200',
             'description' => 'nullable|string',
             'status' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $product->update($validated);
+
+        if ($request->hasFile('image')) {
+            // Delete old primary image if exists
+            $oldImage = $product->primaryImage;
+            if ($oldImage) {
+                $oldPath = str_replace('/storage/', '', $oldImage->image_url);
+                Storage::disk('public')->delete($oldPath);
+                $oldImage->delete();
+            }
+
+            $path = $request->file('image')->store('products', 'public');
+            ProductImage::create([
+                'product_id' => $product->id,
+                'image_url' => Storage::url($path),
+                'is_primary' => true,
+            ]);
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }

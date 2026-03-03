@@ -8,15 +8,15 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div class="lg:col-span-2 space-y-6">
             @foreach($cart as $id => $details)
-            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-6">
-                <div class="w-24 h-24 bg-gray-50 rounded-2xl flex-shrink-0">
+            <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:row items-center gap-6">
+                <div class="w-24 h-24 bg-gray-50 rounded-2xl shrink-0">
                     @if($details['image'])
                         <img src="{{ $details['image'] }}" class="w-full h-full object-contain p-2" alt="Product">
                     @else
                         <div class="w-full h-full flex items-center justify-center text-3xl opacity-20">💊</div>
                     @endif
                 </div>
-                <div class="flex-grow text-center md:text-left">
+                <div class="grow text-center md:text-left">
                     <h3 class="font-black text-gray-900 md:text-xl">{{ $details['name'] }}</h3>
                     <p class="text-xs text-blue-600 font-bold italic">{{ $details['generic'] }}</p>
                     <div class="mt-2 text-gray-400 text-sm font-bold uppercase tracking-widest">৳{{ number_format($details['price'], 2) }} / unit</div>

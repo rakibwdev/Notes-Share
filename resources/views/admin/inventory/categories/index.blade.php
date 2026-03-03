@@ -58,14 +58,14 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category Name</label>
-                    <input type="text" name="name" required class="w-full border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="e.g. Antibiotics">
+                    <input type="text" name="name" required class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="e.g. Antibiotics">
                     @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div class="flex items-center gap-2">
                     <input type="checkbox" name="status" value="1" id="status_add" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                     <label for="status_add" class="text-xs font-bold text-gray-600 cursor-pointer uppercase">Active Status</label>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors text-sm">Create Category</button>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg p-1  font-bold hover:bg-blue-700 transition-colors text-sm">Create Category</button>
             </form>
         </div>
     </div>
