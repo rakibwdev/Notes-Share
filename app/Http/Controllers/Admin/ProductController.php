@@ -35,8 +35,10 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Category::all();
+        $generic_names = Product::whereNotNull('generic_name')->distinct()->pluck('generic_name');
+        $manufacturers = Product::whereNotNull('manufacturer')->distinct()->pluck('manufacturer');
 
-        return view('admin.inventory.products.create', compact('categories'));
+        return view('admin.inventory.products.create', compact('categories', 'generic_names', 'manufacturers'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -69,8 +71,10 @@ class ProductController extends Controller
     {
         $product->load('primaryImage');
         $categories = Category::all();
+        $generic_names = Product::whereNotNull('generic_name')->distinct()->pluck('generic_name');
+        $manufacturers = Product::whereNotNull('manufacturer')->distinct()->pluck('manufacturer');
 
-        return view('admin.inventory.products.edit', compact('product', 'categories'));
+        return view('admin.inventory.products.edit', compact('product', 'categories', 'generic_names', 'manufacturers'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse

@@ -50,10 +50,22 @@
                     <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
                     @auth
-                        <a href="{{ route('profile') }}" class="hidden sm:flex items-center gap-2 text-sm font-black text-indigo-950 hover:text-indigo-600 transition-colors uppercase tracking-widest">
-                            <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">👤</span>
-                            Account
-                        </a>
+                        <div class="hidden sm:flex items-center gap-6">
+                            @if(auth()->user()->is_admin)
+                                <a href="{{ route('admin.dashboard') }}" class="text-xs font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 transition-colors">Admin Panel</a>
+                            @endif
+                            <a href="{{ route('profile') }}" class="flex items-center gap-2 text-sm font-black text-indigo-950 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+                                <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">👤</span>
+                                {{ auth()->user()->name }}
+                            </a>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-50 border border-rose-100 text-[10px] font-black uppercase tracking-widest text-rose-600 hover:bg-rose-600 hover:text-white transition-all shadow-sm hover:shadow-rose-100/50 group">
+                                    <span class="text-xs group-hover:-translate-x-1 transition-transform">←</span>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" class="hidden sm:block text-sm font-black text-indigo-950 hover:text-indigo-600 transition-colors uppercase tracking-widest">Login</a>
                         <a href="{{ route('register') }}" class="hidden sm:block bg-indigo-600 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100">Sign Up</a>
@@ -100,7 +112,7 @@
                 <div class="space-y-8 text-center md:text-left">
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl">💊</div>
-                        <span class="text-2xl font-black tracking-tighter uppercase italic">MedStore<span class="text-indigo-500">BD</span></span>
+                        <span class="text-2xl font-black tracking-tighter uppercase italic">Notes<span class="text-indigo-500">Share</span></span>
                     </div>
                     <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                         Bangladesh's most trusted digital pharmacy. Dedicated to bringing healthcare accessibility to every doorstep with authenticity guaranteed.

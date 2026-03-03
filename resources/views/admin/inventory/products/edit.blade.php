@@ -25,7 +25,12 @@
                 <!-- Generic Name -->
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Generic Name</label>
-                    <input type="text" name="generic_name" value="{{ old('generic_name', $product->generic_name) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="e.g. Paracetamol">
+                    <input type="text" name="generic_name" list="generic_names_list" value="{{ old('generic_name', $product->generic_name) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="e.g. Paracetamol">
+                    <datalist id="generic_names_list">
+                        @foreach($generic_names as $gn)
+                            <option value="{{ $gn }}">
+                        @endforeach
+                    </datalist>
                     @error('generic_name') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
                 </div>
 
@@ -44,7 +49,12 @@
                 <!-- Manufacturer -->
                 <div class="space-y-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Manufacturer</label>
-                    <input type="text" name="manufacturer" value="{{ old('manufacturer', $product->manufacturer) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="e.g. Beximco Pharma">
+                    <input type="text" name="manufacturer" list="manufacturers_list" value="{{ old('manufacturer', $product->manufacturer) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="e.g. Beximco Pharma">
+                    <datalist id="manufacturers_list">
+                        @foreach($manufacturers as $mf)
+                            <option value="{{ $mf }}">
+                        @endforeach
+                    </datalist>
                     @error('manufacturer') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
                 </div>
 
