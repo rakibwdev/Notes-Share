@@ -11,6 +11,10 @@
 }
 
 @layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
     button, a, select, input[type="submit"], input[type="button"], label[for], .cursor-pointer {
         cursor: pointer;
     }

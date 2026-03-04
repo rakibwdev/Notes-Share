@@ -27,13 +27,18 @@
 
         <!-- Product Grid -->
         <div class="lg:col-span-3 space-y-8">
-            <!-- Search Results Header -->
-            @if(request('search'))
-                <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
-                    <span class="text-gray-600">Showing results for "<span class="font-bold text-gray-900">{{ request('search') }}</span>"</span>
-                    <a href="{{ route('products.index') }}" class="text-xs font-black text-red-500 uppercase">Clear Search</a>
+            <!-- Search Results & Header -->
+            <div class="flex flex-col md:row justify-between items-center gap-4 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                <div class="flex-grow w-full max-w-md relative group">
+                    <form action="{{ route('products.index') }}" method="GET">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search medicine..." class="w-full bg-gray-50 border-gray-100 rounded-2xl py-3 px-4 pl-12 text-sm font-bold text-gray-900 focus:ring-2 focus:ring-blue-500/20 outline-none">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40">🔍</span>
+                    </form>
                 </div>
-            @endif
+                @if(request('search'))
+                    <a href="{{ route('products.index') }}" class="text-xs font-black text-rose-500 uppercase tracking-widest hover:underline">Clear Search</a>
+                @endif
+            </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 @forelse($products as $product)
@@ -53,20 +58,20 @@
                         <div class="space-y-4">
                             <div class="flex items-center justify-between gap-2">
                                 <div class="text-lg md:text-xl font-black text-blue-900">৳{{ number_format($product->price, 2) }}</div>
-                                <div class="text-[10px] font-bold text-gray-400 uppercase italic">Base Price</div>
+                                <div class="text-[10px] font-bold text-gray-400 uppercase italic">Base</div>
                             </div>
                             
-                            <form action="{{ route('cart.add', $product) }}" method="POST" class="space-y-3">
+                            <form action="{{ route('cart.add', $product) }}" method="POST" @submit="addToCart($event, $el)" class="space-y-3">
                                 @csrf
                                 <div class="grid grid-cols-2 gap-2">
-                                    <select name="unit_type" class="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest text-gray-600 outline-none focus:ring-2 focus:ring-blue-500/20 appearance-none cursor-pointer">
+                                    <select name="unit_type" class="bg-gray-50 border border-gray-100 rounded-xl px-2 py-2 text-[10px] font-black uppercase tracking-widest text-gray-600 outline-none appearance-none cursor-pointer">
                                         <option value="piece">Piece</option>
                                         <option value="strip">Strip</option>
                                         <option value="box">Box</option>
                                     </select>
-                                    <input type="number" name="quantity" value="1" min="1" class="bg-gray-50 border border-gray-100 rounded-xl px-3 py-2 text-[10px] font-black text-center outline-none focus:ring-2 focus:ring-blue-500/20">
+                                    <input type="number" name="quantity" value="1" min="1" class="bg-gray-50 border border-gray-100 rounded-xl px-2 py-2 text-[10px] font-black text-center outline-none">
                                 </div>
-                                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
+                                <button type="submit" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-blue-700 transition-all shadow-lg">
                                     Add to Cart
                                 </button>
                             </form>

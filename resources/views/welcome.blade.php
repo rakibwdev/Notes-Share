@@ -71,10 +71,10 @@
     </div>
 
     <!-- RX Upload Modal -->
-    <div x-show="showRxModal" 
-         class="fixed inset-0 z-[100] overflow-y-auto" 
-         x-cloak>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <template x-teleport="body">
+        <div x-show="showRxModal" 
+             class="fixed inset-0 z-[9999] overflow-y-auto flex items-center justify-center p-4" 
+             x-cloak>
             <div x-show="showRxModal" 
                  x-transition:enter="ease-out duration-300" 
                  x-transition:enter-start="opacity-0" 
@@ -87,12 +87,12 @@
 
             <div x-show="showRxModal" 
                  x-transition:enter="ease-out duration-300" 
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                 x-transition:enter-start="opacity-0 translate-y-4 scale-95" 
+                 x-transition:enter-end="opacity-100 translate-y-0 scale-100" 
                  x-transition:leave="ease-in duration-200" 
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 class="inline-block w-full max-w-xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-[2.5rem] border border-white">
+                 x-transition:leave-start="opacity-100 translate-y-0 scale-100" 
+                 x-transition:leave-end="opacity-0 translate-y-4 scale-95" 
+                 class="relative w-full max-w-xl p-8 transition-all transform bg-white shadow-2xl rounded-[2.5rem] border border-white z-10">
                 
                 <div class="flex justify-between items-center mb-8">
                     <div>
@@ -139,7 +139,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </template>
 </div>
 
 <!-- Refined Categories -->
@@ -187,7 +187,7 @@
                     <button class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-xl hover:bg-rose-50 hover:text-rose-500 transition-colors">♥</button>
                 </div>
                 <div class="absolute bottom-6 left-6 right-6 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                    <form action="{{ route('cart.add', $product) }}" method="POST" class="bg-white/90 backdrop-blur-md p-4 rounded-[2rem] shadow-2xl border border-white space-y-3">
+                    <form action="{{ route('cart.add', $product) }}" method="POST" @submit="addToCart($event, $el)" class="bg-white/90 backdrop-blur-md p-4 rounded-[2rem] shadow-2xl border border-white space-y-3">
                         @csrf
                         <div class="grid grid-cols-2 gap-2">
                             <select name="unit_type" class="bg-slate-50 border-none rounded-xl px-3 py-2 text-[9px] font-black uppercase tracking-widest text-slate-600 outline-none focus:ring-2 focus:ring-indigo-500/20 appearance-none cursor-pointer">

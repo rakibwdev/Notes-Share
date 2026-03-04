@@ -40,11 +40,9 @@
                 <div class="flex items-center gap-2 sm:gap-6">
                     <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-600 hover:text-indigo-600 transition-colors group">
                         <span class="text-2xl italic">🛒</span>
-                        @if(session('cart') && count(session('cart')) > 0)
-                            <span class="absolute -top-1 -right-1 bg-indigo-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full ring-4 ring-white">
-                                {{ count(session('cart')) }}
-                            </span>
-                        @endif
+                        <span id="cart-count" class="{{ !(session('cart') && count(session('cart')) > 0) ? 'hidden' : '' }} absolute -top-1 -right-1 bg-indigo-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full ring-4 ring-white">
+                            {{ count(session('cart', [])) }}
+                        </span>
                     </a>
 
                     <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
@@ -103,6 +101,53 @@
     <main>
         @yield('content')
     </main>
+
+    <script>
+        async function addToCart(event, form) {
+            event.preventDefault();
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="inline-block animate-spin mr-2">🌀</span> Adding...';
+
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update cart count
+                    const cartCount = document.getElementById('cart-count');
+                    cartCount.innerText = data.cart_count;
+                    cartCount.classList.remove('hidden');
+                    
+                    // Visual feedback
+                    const originalClasses = btn.className;
+                    btn.innerText = '✅ Added!';
+                    btn.classList.add('!bg-emerald-500', '!text-white');
+                    
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                        btn.className = originalClasses;
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
 
     <!-- Premium Footer -->
     <footer class="bg-slate-950 text-white mt-32 relative overflow-hidden">

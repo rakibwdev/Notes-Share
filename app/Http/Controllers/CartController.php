@@ -20,7 +20,7 @@ class CartController extends Controller
         return view('cart.index', compact('cart', 'total'));
     }
 
-    public function add(Request $request, Product $product): RedirectResponse
+    public function add(Request $request, Product $product)
     {
         $cart = session()->get('cart', []);
         $quantity = (int) $request->input('quantity', 1);
@@ -44,6 +44,17 @@ class CartController extends Controller
         }
 
         session()->put('cart', $cart);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "{$product->name} ({$unitType}) added to cart!",
+                'cart_count' => count($cart),
+                'cart_total' => array_reduce($cart, function($carry, $item) {
+                    return $carry + ($item['price'] * $item['quantity']);
+                }, 0)
+            ]);
+        }
 
         return redirect()->back()->with('success', "{$product->name} ({$unitType}) added to cart!");
     }
