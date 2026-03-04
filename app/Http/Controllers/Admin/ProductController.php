@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Generic;
+use App\Models\Manufacturer;
 use App\Models\ProductImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +17,7 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Product::with(['category', 'batches', 'primaryImage']);
+        $query = Product::with(['category', 'batches', 'primaryImage', 'generic', 'manufacturerRelationship']);
 
         if ($request->search) {
             $query->where('name', 'like', "%{$request->search}%")
@@ -35,8 +37,8 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = Category::all();
-        $generic_names = Product::whereNotNull('generic_name')->distinct()->pluck('generic_name');
-        $manufacturers = Product::whereNotNull('manufacturer')->distinct()->pluck('manufacturer');
+        $generic_names = Generic::pluck('name');
+        $manufacturers = Manufacturer::pluck('name');
 
         return view('admin.inventory.products.create', compact('categories', 'generic_names', 'manufacturers'));
     }
@@ -56,6 +58,18 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
+        // Dynamic Generic
+        if (!empty($validated['generic_name'])) {
+            $generic = Generic::firstOrCreate(['name' => $validated['generic_name']]);
+            $validated['generic_id'] = $generic->id;
+        }
+
+        // Dynamic Manufacturer
+        if (!empty($validated['manufacturer'])) {
+            $manufacturer = Manufacturer::firstOrCreate(['name' => $validated['manufacturer']]);
+            $validated['manufacturer_id'] = $manufacturer->id;
+        }
+
         $product = Product::create($validated);
 
         if ($request->hasFile('image')) {
@@ -72,10 +86,10 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        $product->load('primaryImage');
+        $product->load(['primaryImage', 'generic', 'manufacturerRelationship']);
         $categories = Category::all();
-        $generic_names = Product::whereNotNull('generic_name')->distinct()->pluck('generic_name');
-        $manufacturers = Product::whereNotNull('manufacturer')->distinct()->pluck('manufacturer');
+        $generic_names = Generic::pluck('name');
+        $manufacturers = Manufacturer::pluck('name');
 
         return view('admin.inventory.products.edit', compact('product', 'categories', 'generic_names', 'manufacturers'));
     }
@@ -94,6 +108,18 @@ class ProductController extends Controller
             'status' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        // Dynamic Generic
+        if (!empty($validated['generic_name'])) {
+            $generic = Generic::firstOrCreate(['name' => $validated['generic_name']]);
+            $validated['generic_id'] = $generic->id;
+        }
+
+        // Dynamic Manufacturer
+        if (!empty($validated['manufacturer'])) {
+            $manufacturer = Manufacturer::firstOrCreate(['name' => $validated['manufacturer']]);
+            $validated['manufacturer_id'] = $manufacturer->id;
+        }
 
         $product->update($validated);
 

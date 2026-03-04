@@ -46,6 +46,7 @@
                             ['route' => 'admin.orders.index', 'icon' => '🛒', 'label' => 'Sales Orders'],
                             ['route' => 'admin.customers.index', 'icon' => '👥', 'label' => 'Customers'],
                             ['route' => 'admin.delivery.index', 'icon' => '🚚', 'label' => 'Delivery Staff'],
+                            ['route' => 'admin.prescriptions.index', 'icon' => '📄', 'label' => 'Prescriptions'],
                             ['route' => 'admin.users.index', 'icon' => '👤', 'label' => 'User Control'],
                         ];
                     @endphp
@@ -103,7 +104,7 @@
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="group flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-all shadow-sm hover:shadow-rose-100/50">
-                            <span class="text-xs group-hover:translate-x-1 transition-transform">🚪</span>
+                            <span class="text-xs group-hover:translate-x-1 transition-transform">←</span>
                             Sign Out
                         </button>
                     </form>

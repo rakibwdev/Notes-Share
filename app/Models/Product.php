@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
     protected $fillable = [
         'name',
         'generic_name',
+        'generic_id',
         'category_id',
         'manufacturer',
+        'manufacturer_id',
         'description',
         'pieces_per_strip',
         'pieces_per_box',
@@ -24,7 +27,38 @@ class Product extends Model
     {
         return [
             'status' => 'boolean',
+            'price_per_piece' => 'float',
         ];
+    }
+
+    public function generic(): BelongsTo
+    {
+        return $this->belongsTo(Generic::class);
+    }
+
+    public function manufacturerRelationship(): BelongsTo
+    {
+        return $this->belongsTo(Manufacturer::class, 'manufacturer_id');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    public function primaryImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', true);
+    }
+
+    public function batches(): HasMany
+    {
+        return $this->hasMany(Batch::class);
     }
 
     /**
@@ -58,26 +92,6 @@ class Product extends Model
             'box' => $quantity * $this->pieces_per_box,
             default => $quantity,
         };
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function images(): HasMany
-    {
-        return $this->hasMany(ProductImage::class);
-    }
-
-    public function primaryImage()
-    {
-        return $this->hasOne(ProductImage::class)->where('is_primary', true);
-    }
-
-    public function batches(): HasMany
-    {
-        return $this->hasMany(Batch::class);
     }
 
     /**

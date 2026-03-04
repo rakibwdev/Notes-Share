@@ -38,14 +38,14 @@
                             <div class="text-xs text-gray-500">Pay when you receive</div>
                         </div>
                     </label>
-                    <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 group">
+                    <!-- <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 group">
                         <input type="radio" name="payment_method" value="bKash/Online" class="hidden">
                         <span class="text-2xl mr-4 group-has-[:checked]:scale-110 transition-transform">📱</span>
                         <div>
                             <div class="font-black text-gray-900">Online / Mobile</div>
                             <div class="text-xs text-gray-500">bKash, Nagad, or Card</div>
                         </div>
-                    </label>
+                    </label> -->
                 </div>
             </div>
         </div>

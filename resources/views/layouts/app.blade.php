@@ -143,7 +143,7 @@
                         </li>
                         <li class="flex flex-col">
                             <span class="text-[10px] font-black uppercase tracking-tighter mb-1 opacity-40 italic">Email Us</span>
-                            <span class="text-lg font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">support@medstore.com</span>
+                            <span class="text-lg font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">support@notesshare.com</span>
                         </li>
                     </ul>
                 </div>
@@ -159,7 +159,7 @@
 
             <div class="mt-24 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-center">
                 <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest italic">
-                    © {{ date('Y') }} MedStore Bangladesh — Built for excellence
+                    © {{ date('Y') }} Notesshare Bangladesh — Built for excellence
                 </p>
                 <div class="flex gap-8 text-[10px] font-black text-slate-600 uppercase tracking-widest">
                     <a href="#" class="hover:text-white">Privacy</a>

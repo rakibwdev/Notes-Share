@@ -26,6 +26,9 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
+// Prescription Upload
+Route::post('/prescriptions/upload', [\App\Http\Controllers\PrescriptionController::class, 'store'])->name('prescriptions.store');
+
 // Customer Frontend
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -64,6 +67,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/{user}/toggle', [UserController::class, 'toggleAdmin'])->name('users.toggle');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Prescription Management
+    Route::get('/prescriptions', [\App\Http\Controllers\Admin\PrescriptionController::class, 'index'])->name('prescriptions.index');
+    Route::get('/prescriptions/{prescription}', [\App\Http\Controllers\Admin\PrescriptionController::class, 'show'])->name('prescriptions.show');
+    Route::patch('/prescriptions/{prescription}/status', [\App\Http\Controllers\Admin\PrescriptionController::class, 'updateStatus'])->name('admin.prescriptions.update-status');
 
     Route::get('/customers', [\App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
     Route::get('/delivery', [\App\Http\Controllers\Admin\DeliveryManController::class, 'index'])->name('delivery.index');

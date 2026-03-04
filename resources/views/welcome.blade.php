@@ -2,9 +2,16 @@
 
 @section('content')
 <!-- Premium Hero -->
-<div class="relative bg-white pt-16 pb-32 overflow-hidden">
+<div class="relative bg-white pt-16 pb-32 overflow-hidden" x-data="{ showRxModal: false }">
     <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-50 -skew-x-12 translate-x-24 hidden lg:block"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="mb-8 bg-emerald-50 border-l-4 border-emerald-500 p-4 text-emerald-700 font-bold rounded-r-xl shadow-sm animate-fade-in">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
             <div class="space-y-10 text-center lg:text-left">
                 <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest animate-bounce">
@@ -21,14 +28,25 @@
                 <p class="text-lg text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium italic">
                     Order authentic medicines and healthcare essentials from the safety of your home. Verified by professional pharmacists.
                 </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <form action="{{ route('products.index') }}" method="GET" class="flex-grow max-w-md relative group">
+                        <input type="text" name="search" placeholder="Search medicine or generic..." class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-6 pl-14 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none shadow-sm group-hover:shadow-md">
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-40 group-hover:opacity-100 transition-opacity">🔍</span>
+                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg">
+                            <span class="px-2 text-[10px] font-black uppercase tracking-widest">Find</span>
+                        </button>
+                    </form>
+                </div>
+
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <a href="{{ route('products.index') }}" class="bg-slate-900 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-100 flex items-center justify-center gap-2 group">
                         Start Shopping
                         <span class="group-hover:translate-x-1 transition-transform">→</span>
                     </a>
-                    <a href="#" class="bg-white text-slate-900 border border-slate-200 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                    <button @click="showRxModal = true" class="bg-white text-slate-900 border border-slate-200 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
                         <span>📄</span> Upload Rx
-                    </a>
+                    </button>
                 </div>
                 <div class="flex items-center gap-8 justify-center lg:justify-start pt-4">
                     <div class="flex flex-col">
@@ -48,6 +66,77 @@
                 <img src="https://img.freepik.com/free-photo/pharmacist-giving-medicine-customer-pharmacy_23-2148892589.jpg" 
                      class="relative w-full rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[12px] border-white transform hover:scale-[1.02] transition-transform duration-700" 
                      alt="MedStore Hero">
+            </div>
+        </div>
+    </div>
+
+    <!-- RX Upload Modal -->
+    <div x-show="showRxModal" 
+         class="fixed inset-0 z-[100] overflow-y-auto" 
+         x-cloak>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div x-show="showRxModal" 
+                 x-transition:enter="ease-out duration-300" 
+                 x-transition:enter-start="opacity-0" 
+                 x-transition:enter-end="opacity-100" 
+                 x-transition:leave="ease-in duration-200" 
+                 x-transition:leave-start="opacity-100" 
+                 x-transition:leave-end="opacity-0" 
+                 class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-sm" 
+                 @click="showRxModal = false"></div>
+
+            <div x-show="showRxModal" 
+                 x-transition:enter="ease-out duration-300" 
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                 x-transition:leave="ease-in duration-200" 
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                 class="inline-block w-full max-w-xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-[2.5rem] border border-white">
+                
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">Upload Prescription</h3>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Order fast with your RX</p>
+                    </div>
+                    <button @click="showRxModal = false" class="text-2xl text-slate-300 hover:text-slate-900 transition-colors">✕</button>
+                </div>
+
+                <form action="{{ route('prescriptions.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    @csrf
+                    
+                    <!-- Image Upload -->
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] italic ml-1">Prescription Image <span class="text-rose-500">*</span></label>
+                        <div class="relative group">
+                            <input type="file" name="image" required class="w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-8 text-sm font-bold text-slate-900 focus:border-indigo-500 transition-all outline-none file:hidden text-center cursor-pointer">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none group-hover:text-indigo-600 transition-colors">
+                                <span class="text-3xl mb-2">📸</span>
+                                <span class="text-xs font-black uppercase tracking-widest">Click to Select or Drop Image</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] italic ml-1">Contact Phone <span class="text-rose-500">*</span></label>
+                            <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone ?? '') }}" required class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="+880...">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] italic ml-1">Delivery Address <span class="text-rose-500">*</span></label>
+                            <input type="text" name="address" value="{{ old('address', auth()->user()->address ?? '') }}" required class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none" placeholder="Street, Area, City...">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] italic ml-1">Additional Note (Optional)</label>
+                        <textarea name="note" rows="2" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none resize-none" placeholder="Special instructions for the pharmacist..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-100 mt-4">
+                        Confirm Upload
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -108,7 +197,7 @@
                             </select>
                             <input type="number" name="quantity" value="1" min="1" class="bg-slate-50 border-none rounded-xl px-3 py-2 text-[9px] font-black text-center outline-none focus:ring-2 focus:ring-indigo-500/20">
                         </div>
-                        <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 shadow-xl transition-all">Quick Add</button>
+                        <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 shadow-xl transition-all">Add to Cart</button>
                     </form>
                 </div>
             </div>
