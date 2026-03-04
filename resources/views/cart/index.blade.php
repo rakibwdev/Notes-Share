@@ -18,11 +18,17 @@
                 </div>
                 <div class="grow text-center md:text-left">
                     <h3 class="font-black text-gray-900 md:text-xl">{{ $details['name'] }}</h3>
-                    <p class="text-xs text-blue-600 font-bold italic">{{ $details['generic'] }}</p>
-                    <div class="mt-2 text-gray-400 text-sm font-bold uppercase tracking-widest">৳{{ number_format($details['price'], 2) }} / unit</div>
+                    <p class="text-xs text-blue-600 font-bold italic mb-2">{{ $details['generic'] }}</p>
+                    <div class="flex items-center justify-center md:justify-start gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">{{ $details['unit_type'] }}</span>
+                        <span class="text-gray-400 text-xs font-bold italic">৳{{ number_format($details['price'], 2) }} / unit</span>
+                    </div>
                 </div>
                 <div class="flex items-center gap-8">
-                    <div class="font-black text-gray-900 text-xl">{{ $details['quantity'] }} pcs</div>
+                    <div class="text-right">
+                        <div class="font-black text-gray-900 text-xl">{{ $details['quantity'] }}</div>
+                        <div class="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">Subtotal: ৳{{ number_format($details['price'] * $details['quantity'], 2) }}</div>
+                    </div>
                     <form action="{{ route('cart.remove') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id" value="{{ $id }}">

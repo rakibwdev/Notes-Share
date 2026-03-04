@@ -45,7 +45,7 @@
                     <th class="px-6 py-4 border-b">Total Price</th>
                     <th class="px-6 py-4 border-b">Delivery Staff</th>
                     <th class="px-6 py-4 border-b">Status</th>
-                    <th class="px-6 py-4 border-b text-right">Actions</th>
+                    <th class="px-6 py-4 border-b text-center">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 text-sm">
@@ -71,7 +71,7 @@
                             {{ $order->status }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-center">
                         <a href="{{ route('admin.orders.show', $order) }}" class="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded font-bold text-xs hover:bg-blue-100 transition-colors">
                             Manage Order
                         </a>

@@ -71,8 +71,9 @@
                                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">{{ $item->product->generic_name }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs font-black text-slate-900 italic">৳{{ number_format($item->unit_price) }} × {{ $item->quantity }}</p>
-                                <p class="text-sm font-black text-indigo-600 italic">৳{{ number_format($item->total_price) }}</p>
+                                <p class="text-xs font-black text-slate-900 italic">৳{{ number_format($item->price, 2) }} × {{ $item->ordered_quantity }} {{ $item->unit_type }}(s)</p>
+                                <p class="text-sm font-black text-indigo-600 italic">৳{{ number_format($item->subtotal, 2) }}</p>
+                                <p class="text-[8px] text-slate-400 uppercase font-bold tracking-tighter">Batch: {{ $item->batch->batch_number }}</p>
                             </div>
                         </div>
                         @endforeach

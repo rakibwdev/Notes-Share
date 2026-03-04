@@ -13,17 +13,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label class="block text-xs font-bold text-gray-500 uppercase">Full Name</label>
-                        <input type="text" name="name" required class="w-full border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500" placeholder="John Doe">
+                        <input type="text" name="name" value="{{ old('name', $customer->name ?? auth()->user()->name ?? '') }}" required class="w-full border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500" placeholder="John Doe">
                     </div>
                     <div class="space-y-2">
                         <label class="block text-xs font-bold text-gray-500 uppercase">Phone Number</label>
-                        <input type="text" name="phone" required class="w-full border-gray-200 rounded-xl py-3 px-4 font-mono focus:ring-2 focus:ring-blue-500" placeholder="+880...">
+                        <input type="text" name="phone" value="{{ old('phone', $customer->phone ?? auth()->user()->phone ?? '') }}" required class="w-full border-gray-200 rounded-xl py-3 px-4 font-mono focus:ring-2 focus:ring-blue-500" placeholder="+880...">
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-gray-500 uppercase">Full Delivery Address</label>
-                    <textarea name="address" required rows="3" class="w-full border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500" placeholder="Street, City, Area..."></textarea>
+                    <textarea name="address" required rows="3" class="w-full border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-blue-500" placeholder="Street, City, Area...">{{ old('address', $customer->address ?? auth()->user()->address ?? '') }}</textarea>
                 </div>
             </div>
 

@@ -72,6 +72,28 @@
                     <input type="file" name="image" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 transition-all">
                     @error('image') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
                 </div>
+
+                <!-- Unit Conversions -->
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Pieces Per Strip <span class="text-red-500">*</span></label>
+                    <input type="number" name="pieces_per_strip" value="{{ old('pieces_per_strip', $product->pieces_per_strip) }}" required min="1" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+                    @error('pieces_per_strip') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Pieces Per Box <span class="text-red-500">*</span></label>
+                    <input type="number" name="pieces_per_box" value="{{ old('pieces_per_box', $product->pieces_per_box) }}" required min="1" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+                    @error('pieces_per_box') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Default Selling Price (Per Piece) <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
+                        <input type="number" step="0.01" name="price_per_piece" value="{{ old('price_per_piece', $product->price_per_piece) }}" required min="0" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 pl-8 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+                    </div>
+                    @error('price_per_piece') <p class="text-red-500 text-[10px] font-bold mt-1 uppercase tracking-tighter italic">{{ $message }}</p> @enderror
+                </div>
             </div>
 
             <!-- Description -->

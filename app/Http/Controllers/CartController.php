@@ -23,15 +23,20 @@ class CartController extends Controller
     public function add(Request $request, Product $product): RedirectResponse
     {
         $cart = session()->get('cart', []);
-        $quantity = $request->input('quantity', 1);
-        $price = $product->batches->sortBy('selling_price')->first()->selling_price ?? 0;
+        $quantity = (int) $request->input('quantity', 1);
+        $unitType = $request->input('unit_type', 'piece');
+        
+        $price = $product->getUnitPrice($unitType);
+        $cartKey = $product->id . '_' . $unitType;
 
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] += $quantity;
+        if (isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity'] += $quantity;
         } else {
-            $cart[$product->id] = [
+            $cart[$cartKey] = [
+                'product_id' => $product->id,
                 'name' => $product->name,
                 'quantity' => $quantity,
+                'unit_type' => $unitType,
                 'price' => $price,
                 'image' => $product->primaryImage->image_url ?? null,
                 'generic' => $product->generic_name,
@@ -40,7 +45,7 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        return redirect()->back()->with('success', 'Product added to cart!');
+        return redirect()->back()->with('success', "{$product->name} ({$unitType}) added to cart!");
     }
 
     public function remove(Request $request): RedirectResponse
@@ -53,6 +58,6 @@ class CartController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Product removed!');
+        return redirect()->back()->with('success', 'Item removed!');
     }
 }

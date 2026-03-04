@@ -35,7 +35,10 @@
                                 <div class="text-[10px] text-gray-500 italic">{{ $item->product->generic_name }}</div>
                             </td>
                             <td class="px-6 py-4 text-center text-xs text-gray-600 font-mono">#{{ $item->batch->batch_number }}</td>
-                            <td class="px-6 py-4 text-center font-bold">{{ $item->quantity }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="font-bold text-gray-900">{{ $item->ordered_quantity }} {{ $item->unit_type }}(s)</div>
+                                <div class="text-[10px] text-gray-400 uppercase tracking-tighter">({{ $item->quantity }} pieces)</div>
+                            </td>
                             <td class="px-6 py-4 text-right text-gray-600">৳{{ number_format($item->price, 2) }}</td>
                             <td class="px-6 py-4 text-right font-bold text-gray-900">৳{{ number_format($item->subtotal, 2) }}</td>
                         </tr>

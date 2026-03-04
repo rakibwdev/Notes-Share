@@ -49,6 +49,9 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'manufacturer' => 'nullable|string|max:200',
             'description' => 'nullable|string',
+            'pieces_per_strip' => 'required|integer|min:1',
+            'pieces_per_box' => 'required|integer|min:1',
+            'price_per_piece' => 'required|numeric|min:0',
             'status' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
@@ -85,6 +88,9 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'manufacturer' => 'nullable|string|max:200',
             'description' => 'nullable|string',
+            'pieces_per_strip' => 'required|integer|min:1',
+            'pieces_per_box' => 'required|integer|min:1',
+            'price_per_piece' => 'required|numeric|min:0',
             'status' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
