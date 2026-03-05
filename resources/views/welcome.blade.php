@@ -12,6 +12,16 @@
             </div>
         @endif
 
+        @if($errors->any())
+            <div class="mb-8 bg-rose-50 border-l-4 border-rose-500 p-4 text-rose-700 font-bold rounded-r-xl shadow-sm animate-fade-in">
+                <ul class="list-disc list-inside">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
             <div class="space-y-10 text-center lg:text-left">
                 <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest animate-bounce">
