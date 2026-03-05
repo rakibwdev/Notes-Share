@@ -50,11 +50,13 @@
                 </div>
             </div>
 
-            <!-- Orders Section -->
-            <div class="lg:col-span-2">
+            <!-- Main Content: Orders & Prescriptions -->
+            <div class="lg:col-span-2 space-y-12">
+                <!-- Orders Section -->
                 <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
-                    <div class="p-8 border-b border-slate-50">
-                        <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Order History & Tracking</h3>
+                    <div class="p-8 border-b border-slate-50 flex justify-between items-center">
+                        <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Order History</h3>
+                        <span class="bg-indigo-50 text-indigo-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest italic">{{ $orders->total() }} Total</span>
                     </div>
                     
                     @if($orders->isEmpty())
@@ -87,11 +89,11 @@
                                         <td class="px-8 py-6">
                                             @php
                                                 $statusClasses = [
-                                                    'pending' => 'bg-amber-50 text-amber-600 ring-amber-100',
-                                                    'processing' => 'bg-indigo-50 text-indigo-600 ring-indigo-100',
-                                                    'shipped' => 'bg-blue-50 text-blue-600 ring-blue-100',
-                                                    'delivered' => 'bg-emerald-50 text-emerald-600 ring-emerald-100',
-                                                    'cancelled' => 'bg-rose-50 text-rose-600 ring-rose-100',
+                                                    'Pending' => 'bg-amber-50 text-amber-600 ring-amber-100',
+                                                    'Confirmed' => 'bg-indigo-50 text-indigo-600 ring-indigo-100',
+                                                    'Processing' => 'bg-blue-50 text-blue-600 ring-blue-100',
+                                                    'Delivered' => 'bg-emerald-50 text-emerald-600 ring-emerald-100',
+                                                    'Cancelled' => 'bg-rose-50 text-rose-600 ring-rose-100',
                                                 ];
                                                 $statusClass = $statusClasses[$order->status] ?? 'bg-slate-100 text-slate-600 ring-slate-200';
                                             @endphp
@@ -100,11 +102,11 @@
                                             </span>
                                         </td>
                                         <td class="px-8 py-6 font-black text-slate-900 tracking-tighter">
-                                            ৳{{ number_format($order->total_amount) }}
+                                            ৳{{ number_format($order->total_price) }}
                                         </td>
                                         <td class="px-8 py-6 text-right">
                                             <a href="{{ route('profile.order-details', $order) }}" class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-600 group-hover:translate-x-1 transition-transform italic">
-                                                Track Order <span class="text-xs">→</span>
+                                                Details <span class="text-xs">→</span>
                                             </a>
                                         </td>
                                     </tr>
@@ -115,7 +117,73 @@
                         
                         @if($orders->hasPages())
                         <div class="p-8 bg-slate-50/50 border-t border-slate-50">
-                            {{ $orders->links() }}
+                            {{ $orders->appends(['rx_page' => $prescriptions->currentPage()])->links() }}
+                        </div>
+                        @endif
+                    @endif
+                </div>
+
+                <!-- Prescriptions Section -->
+                <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
+                    <div class="p-8 border-b border-slate-50 flex justify-between items-center">
+                        <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">My Prescriptions</h3>
+                        <span class="bg-emerald-50 text-emerald-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest italic">{{ $prescriptions->total() }} Uploads</span>
+                    </div>
+                    
+                    @if($prescriptions->isEmpty())
+                        <div class="p-20 text-center">
+                            <div class="text-6xl mb-6 opacity-20">📄</div>
+                            <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest italic">No prescriptions uploaded</h4>
+                            <button @click="showRxModal = true" class="mt-6 inline-block text-emerald-600 font-black text-xs uppercase tracking-widest hover:underline italic">Upload Now →</button>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest italic">
+                                    <tr>
+                                        <th class="px-8 py-6">Image</th>
+                                        <th class="px-8 py-6">Date Uploaded</th>
+                                        <th class="px-8 py-6">Review Status</th>
+                                        <th class="px-8 py-6">Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-50">
+                                    @foreach($prescriptions as $rx)
+                                    <tr class="group hover:bg-slate-50/50 transition-all">
+                                        <td class="px-8 py-6">
+                                            <a href="{{ $rx->image_path }}" target="_blank" class="block w-12 h-12 rounded-xl bg-slate-100 overflow-hidden shadow-inner hover:scale-110 transition-transform">
+                                                <img src="{{ $rx->image_path }}" class="w-full h-full object-cover" alt="RX">
+                                            </a>
+                                        </td>
+                                        <td class="px-8 py-6">
+                                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">{{ $rx->created_at->format('d M, Y') }}</span>
+                                        </td>
+                                        <td class="px-8 py-6">
+                                            @php
+                                                $rxStatusClasses = [
+                                                    'Pending' => 'bg-amber-50 text-amber-600 ring-amber-100',
+                                                    'Reviewed' => 'bg-indigo-50 text-indigo-600 ring-indigo-100',
+                                                    'Processing' => 'bg-blue-50 text-blue-600 ring-blue-100',
+                                                    'Delivered' => 'bg-emerald-50 text-emerald-600 ring-emerald-100',
+                                                ];
+                                                $rxStatusClass = $rxStatusClasses[$rx->status] ?? 'bg-slate-100 text-slate-600 ring-slate-200';
+                                            @endphp
+                                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ring-1 {{ $rxStatusClass }}">
+                                                {{ $rx->status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-8 py-6">
+                                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">{{ $rx->phone }}</span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if($prescriptions->hasPages())
+                        <div class="p-8 bg-slate-50/50 border-t border-slate-50">
+                            {{ $prescriptions->appends(['orders_page' => $orders->currentPage()])->links() }}
                         </div>
                         @endif
                     @endif

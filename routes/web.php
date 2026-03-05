@@ -31,6 +31,7 @@ Route::post('/prescriptions/upload', [\App\Http\Controllers\PrescriptionControll
 
 // Customer Frontend
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/products/search-suggestions', [ProductController::class, 'search'])->name('products.search-suggestions');
 
 Route::prefix('products')->name('products.')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('index');

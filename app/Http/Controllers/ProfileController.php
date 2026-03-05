@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,24 +14,34 @@ class ProfileController extends Controller
         $user = auth()->user();
         
         // Ensure user has a linked customer record if they have placed orders before
-        if (!$user->customer && $user->phone) {
-            $customer = \App\Models\Customer::where('phone', $user->phone)->first();
+        // We check for any customer record with this user's email or phone
+        if (!$user->customer) {
+            $customer = \App\Models\Customer::where('phone', $user->phone)
+                ->orWhere('user_id', $user->id)
+                ->first();
+                
             if ($customer && !$customer->user_id) {
                 $customer->update(['user_id' => $user->id]);
             }
+            
+            // Refresh user to load the customer relationship if it was just linked
+            $user->load('customer');
         }
 
         $orders = collect();
         if ($user->customer) {
             $orders = Order::where('customer_id', $user->customer->id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(10, ['*'], 'orders_page');
         } else {
-            // Create a fake paginator for empty orders to avoid errors in view
             $orders = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         }
 
-        return view('profile.index', compact('user', 'orders'));
+        $prescriptions = Prescription::where('user_id', $user->id)
+            ->latest()
+            ->paginate(5, ['*'], 'rx_page');
+
+        return view('profile.index', compact('user', 'orders', 'prescriptions'));
     }
 
     public function showOrder(Order $order): View

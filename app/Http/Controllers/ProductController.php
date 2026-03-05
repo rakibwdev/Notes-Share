@@ -9,6 +9,35 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        if (empty($query)) {
+            return response()->json([]);
+        }
+
+        $products = Product::where('status', true)
+            ->where(function($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                  ->orWhere('generic_name', 'like', "%{$query}%");
+            })
+            ->with('primaryImage')
+            ->take(8)
+            ->get()
+            ->map(function($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'generic' => $product->generic_name,
+                    'url' => route('products.show', $product),
+                    'image' => $product->primaryImage->image_url ?? null,
+                    'price' => number_format($product->price, 2)
+                ];
+            });
+
+        return response()->json($products);
+    }
+
     public function index(Request $request): View
     {
         $query = Product::where('status', true)->with(['category', 'primaryImage', 'batches']);

@@ -40,13 +40,78 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <form action="{{ route('products.index') }}" method="GET" class="flex-grow max-w-md relative group">
-                        <input type="text" name="search" placeholder="Search medicine or generic..." class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-6 pl-14 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none shadow-sm group-hover:shadow-md">
-                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-40 group-hover:opacity-100 transition-opacity">🔍</span>
-                        <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg">
-                            <span class="px-2 text-[10px] font-black uppercase tracking-widest">Find</span>
-                        </button>
-                    </form>
+                    <div class="flex-grow max-w-md relative group" 
+                         x-data="{ 
+                            query: '', 
+                            results: [], 
+                            loading: false,
+                            async search() {
+                                if (this.query.length < 2) {
+                                    this.results = [];
+                                    return;
+                                }
+                                this.loading = true;
+                                try {
+                                    const response = await fetch(`/products/search-suggestions?query=${this.query}`);
+                                    this.results = await response.json();
+                                } catch (e) {
+                                    console.error(e);
+                                } finally {
+                                    this.loading = false;
+                                }
+                            }
+                         }">
+                        <form action="{{ route('products.index') }}" method="GET" class="relative">
+                            <input type="text" 
+                                   name="search" 
+                                   x-model="query" 
+                                   @input.debounce.300ms="search"
+                                   @click.away="results = []"
+                                   placeholder="Search medicine or generic..." 
+                                   autocomplete="off"
+                                   class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-6 pl-14 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none shadow-sm group-hover:shadow-md">
+                            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-40 group-hover:opacity-100 transition-opacity">🔍</span>
+                            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg">
+                                <span class="px-2 text-[10px] font-black uppercase tracking-widest">Find</span>
+                            </button>
+                        </form>
+
+                        <!-- Live Results Dropdown -->
+                        <div x-show="results.length > 0" 
+                             x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="absolute top-full left-0 right-0 mt-4 bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden z-[100]">
+                            <div class="p-4 border-b border-slate-50 bg-slate-50/50">
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Found <span x-text="results.length"></span> Results</p>
+                            </div>
+                            <div class="max-h-[400px] overflow-y-auto">
+                                <template x-for="product in results" :key="product.id">
+                                    <a :href="product.url" class="flex items-center gap-4 p-4 hover:bg-indigo-50/50 transition-all group">
+                                        <div class="w-12 h-12 bg-slate-50 rounded-xl flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100">
+                                            <template x-if="product.image">
+                                                <img :src="product.image" class="w-full h-full object-contain" alt="">
+                                            </template>
+                                            <template x-if="!product.image">
+                                                <span class="text-lg opacity-20">💊</span>
+                                            </template>
+                                        </div>
+                                        <div class="flex-grow">
+                                            <h4 class="text-sm font-black text-slate-900 group-hover:text-indigo-600 transition-colors" x-text="product.name"></h4>
+                                            <p class="text-[10px] font-bold text-slate-400 uppercase italic" x-text="product.generic"></p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm font-black text-slate-900 tracking-tighter italic">৳<span x-text="product.price"></span></p>
+                                        </div>
+                                    </a>
+                                </template>
+                            </div>
+                            <a :href="'/products?search=' + query" class="block p-4 text-center bg-slate-50 text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] hover:bg-indigo-50 transition-colors">
+                                View All Matching Products →
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
