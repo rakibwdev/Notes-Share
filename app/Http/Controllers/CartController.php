@@ -26,6 +26,26 @@ class CartController extends Controller
         $quantity = (int) $request->input('quantity', 1);
         $unitType = $request->input('unit_type', 'piece');
         
+        // Stock Validation
+        $requestedPieces = $product->convertToBaseUnit($quantity, $unitType);
+        $availablePieces = $product->total_stock;
+
+        // Calculate already in cart for this product
+        $inCartPieces = 0;
+        foreach ($cart as $key => $item) {
+            if ($item['product_id'] == $product->id) {
+                $inCartPieces += $product->convertToBaseUnit($item['quantity'], $item['unit_type']);
+            }
+        }
+
+        if (($inCartPieces + $requestedPieces) > $availablePieces) {
+            $msg = "Insufficient stock. Only {$availablePieces} pieces available.";
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+            return redirect()->back()->with('error', $msg);
+        }
+
         $price = $product->getUnitPrice($unitType);
         $cartKey = $product->id . '_' . $unitType;
 

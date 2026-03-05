@@ -57,7 +57,7 @@
                         <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest italic">Order Items</h4>
                     </div>
                     <div class="p-8 space-y-6">
-                        @foreach($order->orderItems as $item)
+                        @foreach($order->items as $item)
                         <div class="flex items-center gap-6">
                             <div class="w-16 h-16 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center text-2xl border border-slate-100">
                                 @if($item->product->primaryImage)

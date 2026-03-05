@@ -13,28 +13,48 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
         
-        // Ensure user has a linked customer record if they have placed orders before
-        // We check for any customer record with this user's email or phone
+        // 1. Link existing customer record if found by phone or email
         if (!$user->customer) {
-            $customer = \App\Models\Customer::where('phone', $user->phone)
-                ->orWhere('user_id', $user->id)
+            $customer = \App\Models\Customer::where('user_id', $user->id)
+                ->orWhere(function($q) use ($user) {
+                    if ($user->phone) $q->where('phone', $user->phone);
+                })
                 ->first();
                 
-            if ($customer && !$customer->user_id) {
-                $customer->update(['user_id' => $user->id]);
+            if ($customer) {
+                if (!$customer->user_id) {
+                    $customer->update(['user_id' => $user->id]);
+                }
+                $user->load('customer');
             }
-            
-            // Refresh user to load the customer relationship if it was just linked
-            $user->load('customer');
         }
 
+        // 2. Fetch orders via customer link
         $orders = collect();
         if ($user->customer) {
             $orders = Order::where('customer_id', $user->customer->id)
                 ->latest()
                 ->paginate(10, ['*'], 'orders_page');
         } else {
-            $orders = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            // Fallback: If no customer record yet, maybe search orders directly by phone?
+            // (Only if phone exists)
+            if ($user->phone) {
+                $customerIds = \App\Models\Customer::where('phone', $user->phone)->pluck('id');
+                if ($customerIds->isNotEmpty()) {
+                    $orders = Order::whereIn('customer_id', $customerIds)
+                        ->latest()
+                        ->paginate(10, ['*'], 'orders_page');
+                } else {
+                    $orders = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+                }
+            } else {
+                $orders = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            }
+        }
+
+        // Debug: Log info if orders are empty but we have a customer
+        if ($orders->isEmpty() && $user->customer) {
+            \Illuminate\Support\Facades\Log::info("User {$user->id} has customer {$user->customer->id} but 0 orders found.");
         }
 
         $prescriptions = Prescription::where('user_id', $user->id)
@@ -51,7 +71,7 @@ class ProfileController extends Controller
             abort(403);
         }
 
-        $order->load(['orderItems.product', 'deliveryMan']);
+        $order->load(['items.product', 'deliveryMan']);
 
         return view('profile.order-details', compact('order'));
     }

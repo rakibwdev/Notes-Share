@@ -58,80 +58,91 @@ class CheckoutController extends Controller
             return redirect()->route('products.index');
         }
 
-        return DB::transaction(function () use ($validated, $cart) {
-            // Find or create customer
-            $customerData = ['name' => $validated['name'], 'address' => $validated['address']];
-            
-            if (auth()->check()) {
-                $customerData['user_id'] = auth()->id();
-            }
-
-            $customer = Customer::updateOrCreate(
-                ['phone' => $validated['phone']],
-                $customerData
-            );
-
-            // If user is logged in but the customer record wasn't linked yet, link it
-            if (auth()->check() && !$customer->user_id) {
-                $customer->update(['user_id' => auth()->id()]);
-            }
-
-            $totalPrice = 0;
-            foreach ($cart as $item) {
-                $totalPrice += $item['price'] * $item['quantity'];
-            }
-
-            $order = Order::create([
-                'customer_id' => $customer->id,
-                'total_price' => $totalPrice,
-                'payment_method' => $validated['payment_method'],
-                'status' => 'Pending',
-            ]);
-
-            foreach ($cart as $key => $details) {
-                $product = Product::findOrFail($details['product_id']);
-                $unitType = $details['unit_type'] ?? 'piece';
-                $orderedQty = (int) $details['quantity'];
+        try {
+            return DB::transaction(function () use ($validated, $cart) {
+                // Find or create customer
+                $customerData = ['name' => $validated['name'], 'address' => $validated['address']];
                 
-                // Convert to base unit (pieces) for stock deduction
-                $totalPiecesNeeded = $product->convertToBaseUnit($orderedQty, $unitType);
-                $remainingPieces = $totalPiecesNeeded;
-
-                // Deduct from batches (pick earliest expiring first)
-                $batches = $product->batches()
-                    ->where('expiry_date', '>', now())
-                    ->where('quantity', '>', 0)
-                    ->orderBy('expiry_date')
-                    ->get();
-
-                if ($batches->sum('quantity') < $totalPiecesNeeded) {
-                    throw new \Exception("Insufficient stock for {$product->name}. Requested: {$totalPiecesNeeded} pieces.");
+                if (auth()->check()) {
+                    $customerData['user_id'] = auth()->id();
                 }
 
-                foreach ($batches as $batch) {
-                    if ($remainingPieces <= 0) break;
+                $customer = Customer::updateOrCreate(
+                    ['phone' => $validated['phone']],
+                    $customerData
+                );
 
-                    $deductQty = min($batch->quantity, $remainingPieces);
-                    $batch->decrement('quantity', $deductQty);
+                // If user is logged in but the customer record wasn't linked yet, link it
+                if (auth()->check()) {
+                    $user = auth()->user();
+                    if (!$customer->user_id) {
+                        $customer->update(['user_id' => $user->id]);
+                    }
+
+                    // Also update the user's own phone/address if they are empty
+                    if (!$user->phone) {
+                        $user->update(['phone' => $validated['phone']]);
+                    }
+                }
+                $totalPrice = 0;
+                foreach ($cart as $item) {
+                    $totalPrice += $item['price'] * $item['quantity'];
+                }
+
+                $order = Order::create([
+                    'customer_id' => $customer->id,
+                    'total_price' => $totalPrice,
+                    'payment_method' => $validated['payment_method'],
+                    'status' => 'Pending',
+                ]);
+
+                foreach ($cart as $key => $details) {
+                    $product = Product::findOrFail($details['product_id']);
+                    $unitType = $details['unit_type'] ?? 'piece';
+                    $orderedQty = (int) $details['quantity'];
                     
-                    // Create order item for this batch portion
-                    $order->items()->create([
-                        'product_id' => $product->id,
-                        'batch_id' => $batch->id,
-                        'quantity' => $deductQty, // pieces
-                        'unit_type' => $unitType,
-                        'ordered_quantity' => $orderedQty, // original units
-                        'price' => $details['price'],
-                        'subtotal' => $details['price'] * $details['quantity'],
-                    ]);
+                    // Convert to base unit (pieces) for stock deduction
+                    $totalPiecesNeeded = $product->convertToBaseUnit($orderedQty, $unitType);
+                    $remainingPieces = $totalPiecesNeeded;
 
-                    $remainingPieces -= $deductQty;
+                    // Deduct from batches (pick earliest expiring first)
+                    $batches = $product->batches()
+                        ->where('expiry_date', '>', now())
+                        ->where('quantity', '>', 0)
+                        ->orderBy('expiry_date')
+                        ->get();
+
+                    if ($batches->sum('quantity') < $totalPiecesNeeded) {
+                        throw new \Exception("Insufficient stock for {$product->name}. Requested: {$totalPiecesNeeded} pieces.");
+                    }
+
+                    foreach ($batches as $batch) {
+                        if ($remainingPieces <= 0) break;
+
+                        $deductQty = min($batch->quantity, $remainingPieces);
+                        $batch->decrement('quantity', $deductQty);
+                        
+                        // Create order item for this batch portion
+                        $order->items()->create([
+                            'product_id' => $product->id,
+                            'batch_id' => $batch->id,
+                            'quantity' => $deductQty, // pieces
+                            'unit_type' => $unitType,
+                            'ordered_quantity' => $orderedQty, // original units
+                            'price' => $details['price'],
+                            'subtotal' => $details['price'] * $details['quantity'],
+                        ]);
+
+                        $remainingPieces -= $deductQty;
+                    }
                 }
-            }
 
-            session()->forget('cart');
+                session()->forget('cart');
 
-            return redirect()->route('home')->with('success', 'Order placed successfully! ID: #'.$order->id);
-        });
+                return redirect()->route('home')->with('success', 'Order placed successfully! ID: #'.$order->id);
+            });
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
     }
 }

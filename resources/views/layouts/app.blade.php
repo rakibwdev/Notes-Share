@@ -140,9 +140,14 @@
                         btn.innerHTML = originalText;
                         btn.className = originalClasses;
                     }, 2000);
+                } else {
+                    alert(data.message || 'Error adding to cart');
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
                 }
             } catch (error) {
                 console.error('Error adding to cart:', error);
+                alert('An unexpected error occurred.');
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             }
