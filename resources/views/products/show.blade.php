@@ -129,7 +129,7 @@
                                 {{ $total_stock > 0 ? 'bg-slate-900 text-white hover:bg-indigo-600 shadow-indigo-100' : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none' }}" 
                                 @if($total_stock <= 0) disabled @endif>
                             <span class="text-xl group-hover:scale-125 transition-transform">🛒</span>
-                            {{ $total_stock > 0 ? 'Secure Add to Cart' : 'Currently Unavailable' }}
+                            {{ $total_stock > 0 ? 'Add to Cart' : 'Currently Unavailable' }}
                         </button>
                     </form>
                 </div>
