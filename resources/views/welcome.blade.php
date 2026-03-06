@@ -72,7 +72,7 @@
                                    class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-6 pl-14 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none shadow-sm group-hover:shadow-md">
                             <span class="absolute left-6 top-1/2 -translate-y-1/2 text-xl opacity-40 group-hover:opacity-100 transition-opacity">🔍</span>
                             <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg">
-                                <span class="px-2 text-[10px] font-black uppercase tracking-widest">Find</span>
+                                <span class="px-2 text-[10px] font-black uppercase tracking-widest">Search</span>
                             </button>
                         </form>
 
