@@ -4,9 +4,19 @@
 
 @section('content')
 <div class="space-y-8">
-    <div class="flex items-center gap-4">
-        <a href="{{ route('admin.orders.index') }}" class="bg-white p-2 rounded-lg p-1  border border-gray-200 text-gray-500 hover:text-gray-800">⬅️</a>
-        <h3 class="text-2xl font-bold text-gray-800">Invoice Details</h3>
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="{{ route('admin.orders.index') }}" class="bg-white p-2 rounded-xl border border-slate-200 text-slate-400 hover:text-slate-900 transition-colors">←</a>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tighter uppercase italic">Order #{{ $order->id }}</h3>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank" class="px-6 py-3 rounded-2xl bg-white border border-indigo-600 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all flex items-center gap-2">
+                <span>🖨️</span> Print Invoice
+            </a>
+            <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 {{ $order->status == 'Delivered' ? 'bg-emerald-50 text-emerald-600 ring-emerald-100' : 'bg-amber-50 text-amber-600 ring-amber-100' }}">
+                {{ $order->status }}
+            </span>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

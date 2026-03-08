@@ -63,6 +63,26 @@
 
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Expiring Soon Alert -->
+        @if($expiring_soon->isNotEmpty())
+        <div class="lg:col-span-3 bg-amber-50 border border-amber-100 p-6 rounded-[2rem] flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl">⚠️</div>
+                <div>
+                    <h4 class="font-black text-amber-900 uppercase text-xs tracking-widest italic">Inventory Warning: Items Expiring Soon</h4>
+                    <p class="text-xs text-amber-700 font-medium">There are {{ $expiring_soon->count() }} batches set to expire within the next 30 days. Please review and manage accordingly.</p>
+                </div>
+            </div>
+            <div class="flex -space-x-2 overflow-hidden">
+                @foreach($expiring_soon->take(5) as $batch)
+                    <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-black" title="{{ $batch->product->name }} (Exp: {{ $batch->expiry_date }})">
+                        {{ substr($batch->product->name, 0, 1) }}
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- Recent Orders -->
         <div class="lg:col-span-2 bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
             <div class="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">

@@ -23,7 +23,13 @@ class DashboardController extends Controller
         ];
 
         $recent_orders = Order::with('customer')->latest()->take(5)->get();
+        $expiring_soon = Batch::with('product')
+            ->where('expiry_date', '>', now())
+            ->where('expiry_date', '<=', now()->addDays(30))
+            ->where('quantity', '>', 0)
+            ->orderBy('expiry_date')
+            ->get();
 
-        return view('admin.dashboard', compact('stats', 'recent_orders'));
+        return view('admin.dashboard', compact('stats', 'recent_orders', 'expiring_soon'));
     }
 }

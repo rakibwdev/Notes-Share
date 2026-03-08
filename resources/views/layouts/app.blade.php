@@ -87,11 +87,25 @@
                 <a href="{{ route('products.index') }}" class="block text-lg font-black text-slate-900 tracking-tight">Medicine Catalog</a>
                 <a href="#" class="block text-lg font-black text-slate-900 tracking-tight">Daily Healthcare</a>
                 <a href="{{ route('cart.index') }}" class="block text-lg font-black text-slate-900 tracking-tight">Shopping Cart</a>
+                
+                @auth
+                    <div class="pt-4 border-t border-slate-50 space-y-4">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Account</p>
+                        @if(auth()->user()->is_admin)
+                            <a href="{{ route('admin.dashboard') }}" class="block text-lg font-black text-indigo-600 tracking-tight italic">Admin Panel</a>
+                        @endif
+                        <a href="{{ route('profile') }}" class="block text-lg font-black text-slate-900 tracking-tight">My Profile</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="block w-full text-left text-lg font-black text-rose-500 tracking-tight">Logout</button>
+                        </form>
+                    </div>
+                @endauth
             </div>
             @guest
             <div class="grid grid-cols-2 gap-4 pt-6 border-t border-slate-100">
-                <a href="{{ route('login') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-indigo-950 border border-indigo-950 rounded-2xl">Login</a>
-                <a href="{{ route('register') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-white bg-indigo-600 rounded-2xl">Sign Up</a>
+                <a href="{{ route('login') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-indigo-950 border border-indigo-100 rounded-2xl bg-slate-50">Login</a>
+                <a href="{{ route('register') }}" class="py-4 text-center text-sm font-black uppercase tracking-widest text-white bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-100">Sign Up</a>
             </div>
             @endguest
         </div>

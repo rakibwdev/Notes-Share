@@ -32,6 +32,12 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order', 'delivery_men'));
     }
 
+    public function printInvoice(Order $order): View
+    {
+        $order->load(['customer', 'items.product', 'items.batch']);
+        return view('admin.orders.invoice', compact('order'));
+    }
+
     public function update(Request $request, Order $order): RedirectResponse
     {
         $validated = $request->validate([

@@ -279,18 +279,18 @@
                 </div>
             </div>
             
-            <div class="px-2 grow flex flex-col">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="space-y-1">
-                        <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest italic">{{ $product->category->name }}</p>
-                        <a href="{{ route('products.show', $product) }}" class="text-xl font-black text-slate-900 hover:text-indigo-600 transition-colors tracking-tighter leading-tight block">
-                            {{ $product->name }}
-                        </a>
+                <div class="px-2 grow flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="space-y-1">
+                            <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest italic">{{ $product->category->name }}</p>
+                            <a href="{{ route('products.show', $product) }}" class="text-xl font-black text-slate-900 hover:text-indigo-600 transition-colors tracking-tighter leading-tight block uppercase italic">
+                                {{ $product->name }}
+                            </a>
+                        </div>
+                        <div class="text-xl font-black text-slate-900 tracking-tighter italic">৳{{ number_format($product->price, 0) }}</div>
                     </div>
-                    <div class="text-xl font-black text-slate-900 tracking-tighter">৳{{ number_format($product->price, 0) }}</div>
+                    <p class="text-sm text-slate-400 font-medium italic mb-4">{{ $product->generic_name }}</p>
                 </div>
-                <p class="text-sm text-slate-400 font-medium italic mb-4">{{ $product->generic_name }}</p>
-            </div>
         </div>
         @endforeach
     </div>

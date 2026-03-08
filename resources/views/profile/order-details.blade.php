@@ -24,9 +24,9 @@
                 <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 rounded-full"></div>
                 
                 @php
-                    $steps = ['pending', 'processing', 'shipped', 'delivered'];
+                    $steps = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered'];
                     $currentIdx = array_search($order->status, $steps);
-                    if ($order->status === 'cancelled') $currentIdx = -1;
+                    if ($order->status === 'Cancelled') $currentIdx = -1;
                 @endphp
 
                 <div class="relative flex justify-between">
@@ -34,7 +34,7 @@
                         <div class="flex flex-col items-center gap-4 bg-white px-2">
                             <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg transition-all duration-500
                                 {{ $idx <= $currentIdx ? 'bg-indigo-600 text-white shadow-indigo-200 scale-110' : 'bg-slate-50 text-slate-300 border border-slate-100' }}">
-                                @if($step == 'pending') 📝 @elseif($step == 'processing') ⚙️ @elseif($step == 'shipped') 🚚 @else ✅ @endif
+                                @if($step == 'Pending') 📝 @elseif($step == 'Confirmed') ✅ @elseif($step == 'Processing') ⚙️ @elseif($step == 'Shipped') 🚚 @else 📦 @endif
                             </div>
                             <span class="text-[10px] font-black uppercase tracking-widest {{ $idx <= $currentIdx ? 'text-indigo-600' : 'text-slate-400' }} italic">{{ $step }}</span>
                         </div>
