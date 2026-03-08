@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Order;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
@@ -12,17 +13,19 @@ class ProfileController extends Controller
     public function index(Request $request): View
     {
         $user = auth()->user();
-        
+
         // 1. Link existing customer record if found by phone or email
-        if (!$user->customer) {
+        if (! $user->customer) {
             $customer = \App\Models\Customer::where('user_id', $user->id)
-                ->orWhere(function($q) use ($user) {
-                    if ($user->phone) $q->where('phone', $user->phone);
+                ->orWhere(function ($q) use ($user) {
+                    if ($user->phone) {
+                        $q->where('phone', $user->phone);
+                    }
                 })
                 ->first();
-                
+
             if ($customer) {
-                if (!$customer->user_id) {
+                if (! $customer->user_id) {
                     $customer->update(['user_id' => $user->id]);
                 }
                 $user->load('customer');
@@ -67,19 +70,14 @@ class ProfileController extends Controller
     public function edit(): View
     {
         $user = auth()->user();
+
         return view('profile.edit', compact('user'));
     }
 
-    public function update(Request $request): \Illuminate\Http\RedirectResponse
+    public function update(ProfileUpdateRequest $request): \Illuminate\Http\RedirectResponse
     {
         $user = auth()->user();
-        
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
-        ]);
+        $validated = $request->validated();
 
         $user->update($validated);
 
@@ -98,7 +96,7 @@ class ProfileController extends Controller
     public function showOrder(Order $order): View
     {
         // Ensure the user owns the order through their customer record
-        if (!auth()->user()->customer || $order->customer_id !== auth()->user()->customer->id) {
+        if (! auth()->user()->customer || $order->customer_id !== auth()->user()->customer->id) {
             abort(403);
         }
 
