@@ -41,7 +41,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order): RedirectResponse
     {
         $validated = $request->validate([
-            'status' => 'required|in:Pending,Confirmed,Delivered,Cancelled',
+            'status' => 'required|in:Pending,Confirmed,Processing,Shipped,Delivered,Cancelled',
             'delivery_man_id' => 'nullable|exists:delivery_men,id',
         ]);
 

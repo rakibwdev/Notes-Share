@@ -64,6 +64,37 @@ class ProfileController extends Controller
         return view('profile.index', compact('user', 'orders', 'prescriptions'));
     }
 
+    public function edit(): View
+    {
+        $user = auth()->user();
+        return view('profile.edit', compact('user'));
+    }
+
+    public function update(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $user = auth()->user();
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+        ]);
+
+        $user->update($validated);
+
+        // Also update linked customer record if exists
+        if ($user->customer) {
+            $user->customer->update([
+                'name' => $validated['name'],
+                'phone' => $validated['phone'],
+                'address' => $validated['address'],
+            ]);
+        }
+
+        return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+    }
+
     public function showOrder(Order $order): View
     {
         // Ensure the user owns the order through their customer record

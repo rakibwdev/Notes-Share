@@ -48,6 +48,8 @@ use App\Http\Controllers\ProfileController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/order/{order}', [ProfileController::class, 'showOrder'])->name('profile.order-details');
     
     Route::prefix('checkout')->name('checkout.')->group(function () {

@@ -10,8 +10,8 @@
         .header { display: flex; justify-content: space-between; margin-bottom: 40px; border-bottom: 2px solid #4f46e5; padding-bottom: 20px; }
         .logo { font-size: 28px; font-weight: 900; text-transform: uppercase; color: #4f46e5; }
         .invoice-info { text-align: right; }
-        .details { display: grid; grid-template-cols: 1fr 1px 1fr; gap: 40px; margin-bottom: 40px; }
-        .table { w-full; border-collapse: collapse; margin-bottom: 40px; width: 100%; }
+        .details { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 40px; margin-bottom: 40px; }
+        .table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
         .table th { background: #f8fafc; padding: 12px; text-align: left; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; }
         .table td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         .total-section { float: right; width: 250px; }
@@ -41,9 +41,9 @@
         <div class="details">
             <div>
                 <h4 style="text-transform: uppercase; font-size: 10px; color: #666; margin-bottom: 10px;">Billed To:</h4>
-                <p style="margin: 0; font-weight: bold;">{{ $order->customer->name }}</p>
-                <p style="margin: 0; font-size: 13px;">{{ $order->phone_number }}</p>
-                <p style="margin: 5px 0; font-size: 13px; color: #444;">{{ $order->delivery_address }}</p>
+                <p style="margin: 0; font-weight: bold;">Name: {{ $order->customer->name }}</p>
+                <p style="margin: 0; font-size: 13px;">Phone: {{ $order->customer->phone }}</p>
+                <p style="margin: 5px 0; font-size: 13px; color: #444;">Address: {{ $order->customer->address }}</p>
             </div>
             <div style="background: #eee;"></div>
             <div>

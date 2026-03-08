@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="flex gap-4">
-                <a href="#" class="px-6 py-3 rounded-2xl bg-white border border-slate-200 text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">Edit Profile</a>
+                <a href="{{ route('profile.edit') }}" class="px-6 py-3 rounded-2xl bg-white border border-slate-200 text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all">Edit Profile</a>
             </div>
         </div>
 

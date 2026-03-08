@@ -17,34 +17,60 @@
 
         <!-- Tracking Visual -->
         <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white p-10 mb-8">
-            <h3 class="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] mb-10 italic text-center">Live Tracking Status</h3>
+            <div class="flex justify-between items-center mb-12">
+                <h3 class="text-xs font-black text-indigo-600 uppercase tracking-[0.3em] italic">Live tracking status</h3>
+                <div class="px-4 py-1.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-200">
+                    Current Stage: {{ $order->status }}
+                </div>
+            </div>
             
-            <div class="relative">
-                <!-- Track Line -->
-                <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-100 -translate-y-1/2 rounded-full"></div>
+            <div class="relative px-4">
+                <!-- Background Line -->
+                <div class="absolute top-6 left-0 w-full h-1 bg-slate-100 rounded-full"></div>
                 
                 @php
                     $steps = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered'];
                     $currentIdx = array_search($order->status, $steps);
                     if ($order->status === 'Cancelled') $currentIdx = -1;
+                    $progressWidth = $currentIdx >= 0 ? ($currentIdx / (count($steps) - 1)) * 100 : 0;
                 @endphp
+
+                <!-- Progress Line -->
+                <div class="absolute top-6 left-0 h-1 bg-indigo-600 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(79,70,229,0.5)]" 
+                     style="width: {{ $progressWidth }}%"></div>
 
                 <div class="relative flex justify-between">
                     @foreach($steps as $idx => $step)
-                        <div class="flex flex-col items-center gap-4 bg-white px-2">
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg transition-all duration-500
-                                {{ $idx <= $currentIdx ? 'bg-indigo-600 text-white shadow-indigo-200 scale-110' : 'bg-slate-50 text-slate-300 border border-slate-100' }}">
-                                @if($step == 'Pending') 📝 @elseif($step == 'Confirmed') ✅ @elseif($step == 'Processing') ⚙️ @elseif($step == 'Shipped') 🚚 @else 📦 @endif
+                        <div class="flex flex-col items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-lg transition-all duration-500 z-10
+                                {{ $idx < $currentIdx ? 'bg-indigo-600 text-white shadow-indigo-100' : '' }}
+                                {{ $idx === $currentIdx ? 'bg-indigo-600 text-white shadow-indigo-300 scale-125 ring-4 ring-indigo-50 animate-pulse' : '' }}
+                                {{ $idx > $currentIdx ? 'bg-white text-slate-300 border border-slate-100' : '' }}">
+                                
+                                @if($idx < $currentIdx)
+                                    <span class="text-base">✓</span>
+                                @else
+                                    @if($step == 'Pending') 📝 @elseif($step == 'Confirmed') 👍 @elseif($step == 'Processing') ⚙️ @elseif($step == 'Shipped') 🚚 @else 📦 @endif
+                                @endif
                             </div>
-                            <span class="text-[10px] font-black uppercase tracking-widest {{ $idx <= $currentIdx ? 'text-indigo-600' : 'text-slate-400' }} italic">{{ $step }}</span>
+                            <div class="flex flex-col items-center">
+                                <span class="text-[10px] font-black uppercase tracking-widest transition-colors duration-500 {{ $idx <= $currentIdx ? 'text-indigo-600' : 'text-slate-400' }} italic text-center">{{ $step }}</span>
+                                @if($idx === $currentIdx)
+                                    <span class="text-[8px] font-bold text-indigo-400 uppercase tracking-tighter mt-1 italic animate-bounce">Active Now</span>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            @if($order->status === 'cancelled')
-                <div class="mt-12 p-6 bg-rose-50 rounded-2xl border border-rose-100 text-center">
-                    <p class="text-rose-600 font-black text-xs uppercase tracking-widest italic">This order was cancelled</p>
+            @if($order->status === 'Cancelled')
+                <div class="mt-12 p-6 bg-rose-50 rounded-2xl border border-rose-100 text-center flex items-center justify-center gap-4 animate-fade-in">
+                    <span class="text-2xl">🚫</span>
+                    <div>
+                        <p class="text-rose-600 font-black text-xs uppercase tracking-widest italic">Order Status: Cancelled</p>
+                        <p class="text-[10px] text-rose-400 font-bold mt-1">This order was cancelled and will not be processed.</p>
+                    </div>
                 </div>
             @endif
         </div>

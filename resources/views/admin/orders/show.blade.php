@@ -86,6 +86,8 @@
                         <select name="status" class="w-full border-gray-200 rounded-lg p-1  focus:ring-blue-500 focus:border-blue-500 text-sm font-bold {{ $order->status === 'Delivered' ? 'text-green-600' : ($order->status === 'Cancelled' ? 'text-red-600' : 'text-blue-600') }}">
                             <option value="Pending" {{ $order->status === 'Pending' ? 'selected' : '' }}>Pending</option>
                             <option value="Confirmed" {{ $order->status === 'Confirmed' ? 'selected' : '' }}>Confirmed</option>
+                            <option value="Processing" {{ $order->status === 'Processing' ? 'selected' : '' }}>Processing</option>
+                            <option value="Shipped" {{ $order->status === 'Shipped' ? 'selected' : '' }}>Shipped</option>
                             <option value="Delivered" {{ $order->status === 'Delivered' ? 'selected' : '' }}>Delivered</option>
                             <option value="Cancelled" {{ $order->status === 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                         </select>
