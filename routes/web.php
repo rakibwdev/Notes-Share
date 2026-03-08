@@ -75,7 +75,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Prescription Management
     Route::get('/prescriptions', [\App\Http\Controllers\Admin\PrescriptionController::class, 'index'])->name('prescriptions.index');
     Route::get('/prescriptions/{prescription}', [\App\Http\Controllers\Admin\PrescriptionController::class, 'show'])->name('prescriptions.show');
-    Route::patch('/prescriptions/{prescription}/status', [\App\Http\Controllers\Admin\PrescriptionController::class, 'updateStatus'])->name('admin.prescriptions.update-status');
+    Route::patch('/prescriptions/{prescription}/status', [\App\Http\Controllers\Admin\PrescriptionController::class, 'updateStatus'])->name('prescriptions.update-status');
 
     Route::get('/customers', [\App\Http\Controllers\Admin\CustomerController::class, 'index'])->name('customers.index');
     Route::get('/delivery', [\App\Http\Controllers\Admin\DeliveryManController::class, 'index'])->name('delivery.index');

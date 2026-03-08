@@ -28,13 +28,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
 
     // Resource Routes
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class);
-    Route::apiResource('batches', BatchController::class);
-    Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('delivery-men', DeliveryManController::class);
-    Route::apiResource('orders', OrderController::class);
-    Route::apiResource('banners', BannerController::class);
+    Route::apiResource('categories', CategoryController::class)->names('api.categories');
+    Route::apiResource('products', ProductController::class)->names('api.products');
+    Route::apiResource('batches', BatchController::class)->names('api.batches');
+    Route::apiResource('customers', CustomerController::class)->names('api.customers');
+    Route::apiResource('delivery-men', DeliveryManController::class)->names('api.delivery-men');
+    Route::apiResource('orders', OrderController::class)->names('api.orders');
+    Route::apiResource('banners', BannerController::class)->names('api.banners');
 });
 
 // Public Product Discovery (For Mobile App)
