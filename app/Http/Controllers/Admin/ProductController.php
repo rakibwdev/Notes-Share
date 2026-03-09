@@ -55,6 +55,7 @@ class ProductController extends Controller
             'pieces_per_box' => 'required|integer|min:1',
             'price_per_piece' => 'required|numeric|min:0',
             'status' => 'boolean',
+            'low_stock_threshold' => 'nullable|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
@@ -106,6 +107,7 @@ class ProductController extends Controller
             'pieces_per_box' => 'required|integer|min:1',
             'price_per_piece' => 'required|numeric|min:0',
             'status' => 'boolean',
+            'low_stock_threshold' => 'nullable|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 

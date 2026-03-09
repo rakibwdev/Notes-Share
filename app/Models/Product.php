@@ -21,7 +21,19 @@ class Product extends Model
         'pieces_per_box',
         'price_per_piece',
         'status',
+        'low_stock_threshold',
     ];
+
+    /**
+     * Determine if the product is in low stock state.
+     */
+    public function getIsLowStockAttribute(): bool
+    {
+        $globalThreshold = (int) Setting::getValue('global_low_stock_threshold', 10);
+        $threshold = $this->low_stock_threshold ?? $globalThreshold;
+        
+        return $this->total_stock < $threshold;
+    }
 
     protected function casts(): array
     {

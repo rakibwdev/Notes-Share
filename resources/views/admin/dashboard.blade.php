@@ -3,11 +3,16 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="space-y-10">
+<div class="space-y-10" x-data="{ showExpiringModal: false, showSettingsModal: false }">
     <!-- Welcome Header -->
-    <div>
-        <h3 class="text-3xl font-black text-slate-900 tracking-tighter">Welcome back, Administrator 👋</h3>
-        <p class="text-slate-500 mt-1">Here is a quick overview of your pharmacy's performance today.</p>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <h3 class="text-3xl font-black text-slate-900 tracking-tighter">Welcome back, Administrator 👋</h3>
+            <p class="text-slate-500 mt-1">Here is a quick overview of your pharmacy's performance today.</p>
+        </div>
+        <button @click="showSettingsModal = true" class="px-6 py-3 rounded-2xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm">
+            <span>⚙️</span> Alert Settings
+        </button>
     </div>
 
     <!-- KPI Grid -->
@@ -65,17 +70,17 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Expiring Soon Alert -->
         @if($expiring_soon->isNotEmpty())
-        <div class="lg:col-span-3 bg-amber-50 border border-amber-100 p-6 rounded-[2rem] flex items-center justify-between">
+        <div class="lg:col-span-3 bg-amber-50 border border-amber-100 p-6 rounded-[2rem] flex items-center justify-between cursor-pointer hover:bg-amber-100/50 transition-all group" @click="showExpiringModal = true">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl">⚠️</div>
+                <div class="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">⚠️</div>
                 <div>
                     <h4 class="font-black text-amber-900 uppercase text-xs tracking-widest italic">Inventory Warning: Items Expiring Soon</h4>
-                    <p class="text-xs text-amber-700 font-medium">There are {{ $expiring_soon->count() }} batches set to expire within the next 30 days. Please review and manage accordingly.</p>
+                    <p class="text-xs text-amber-700 font-medium">There are {{ $expiring_soon->count() }} batches set to expire within the next {{ $lowStockDays }} days. <span class="underline font-black">Click to view details</span></p>
                 </div>
             </div>
             <div class="flex -space-x-2 overflow-hidden">
                 @foreach($expiring_soon->take(5) as $batch)
-                    <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-black" title="{{ $batch->product->name }} (Exp: {{ $batch->expiry_date }})">
+                    <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-black uppercase" title="{{ $batch->product->name }} (Exp: {{ $batch->expiry_date }})">
                         {{ substr($batch->product->name, 0, 1) }}
                     </div>
                 @endforeach
@@ -163,6 +168,80 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Expiring Items Modal -->
+    <div x-show="showExpiringModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showExpiringModal = false"></div>
+        <div class="relative w-full max-w-3xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Expiring Medicine Batches</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Batches expiring within {{ $lowStockDays }} days</p>
+                </div>
+                <button @click="showExpiringModal = false" class="text-2xl text-slate-300 hover:text-slate-900">✕</button>
+            </div>
+            <div class="max-h-[60vh] overflow-y-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-widest sticky top-0">
+                        <tr>
+                            <th class="px-8 py-4">Medicine</th>
+                            <th class="px-8 py-4 text-center">Batch #</th>
+                            <th class="px-8 py-4 text-center">Qty Left</th>
+                            <th class="px-8 py-4 text-right">Expiry Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50 text-sm font-bold">
+                        @foreach($expiring_soon as $batch)
+                        <tr class="hover:bg-amber-50/30 transition-colors">
+                            <td class="px-8 py-4">
+                                <div class="text-slate-900 uppercase italic">{{ $batch->product->name }}</div>
+                                <div class="text-[10px] text-slate-400 italic">{{ $batch->product->generic_name }}</div>
+                            </td>
+                            <td class="px-8 py-4 text-center font-mono text-xs">{{ $batch->batch_number }}</td>
+                            <td class="px-8 py-4 text-center">{{ $batch->quantity }} pcs</td>
+                            <td class="px-8 py-4 text-right">
+                                <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-black italic">
+                                    {{ \Carbon\Carbon::parse($batch->expiry_date)->format('d M, Y') }}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-8 bg-slate-50/50 border-t border-slate-50 flex justify-end">
+                <button @click="showExpiringModal = false" class="px-8 py-3 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest">Close Overview</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Settings Modal -->
+    <div x-show="showSettingsModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showSettingsModal = false"></div>
+        <div class="relative w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
+            <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Alert Configuration</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">System-wide inventory thresholds</p>
+                </div>
+                <button @click="showSettingsModal = false" class="text-2xl text-slate-300 hover:text-slate-900">✕</button>
+            </div>
+            <form action="{{ route('admin.settings.update-alerts') }}" method="POST" class="p-8 space-y-6">
+                @csrf
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Expiry Warning Period (Days)</label>
+                    <input type="number" name="expiry_warning_days" value="{{ $lowStockDays }}" min="1" max="365" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 outline-none">
+                    <p class="text-[8px] text-slate-400 italic">Alert will show for batches expiring within these days.</p>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Global Low Stock Threshold</label>
+                    <input type="number" name="global_low_stock_threshold" value="{{ $globalLowStock }}" min="1" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 outline-none">
+                    <p class="text-[8px] text-slate-400 italic">Default quantity to trigger low stock alerts across all products.</p>
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all mt-4">Save Configuration</button>
+            </form>
         </div>
     </div>
 </div>

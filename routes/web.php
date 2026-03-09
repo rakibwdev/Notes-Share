@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 // Admin Panel
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/settings/alerts', [DashboardController::class, 'updateAlertSettings'])->name('settings.update-alerts');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
     Route::resource('batches', \App\Http\Controllers\Admin\BatchController::class);
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);

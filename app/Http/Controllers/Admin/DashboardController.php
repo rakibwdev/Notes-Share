@@ -7,29 +7,47 @@ use App\Models\Batch;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
+        $lowStockDays = (int) Setting::getValue('expiry_warning_days', 30);
+        $globalLowStock = (int) Setting::getValue('global_low_stock_threshold', 10);
+
         $stats = [
             'total_sales' => Order::where('status', 'Delivered')->sum('total_price'),
             'total_orders' => Order::count(),
             'total_products' => Product::count(),
             'total_customers' => Customer::count(),
-            'low_stock_count' => Product::all()->filter(fn ($p) => $p->total_stock < 10)->count(),
+            'low_stock_count' => Product::all()->filter(fn ($p) => $p->is_low_stock)->count(),
             'expired_stock_count' => Batch::where('expiry_date', '<', now())->count(),
         ];
 
         $recent_orders = Order::with('customer')->latest()->take(5)->get();
         $expiring_soon = Batch::with('product')
             ->where('expiry_date', '>', now())
-            ->where('expiry_date', '<=', now()->addDays(30))
+            ->where('expiry_date', '<=', now()->addDays($lowStockDays))
             ->where('quantity', '>', 0)
             ->orderBy('expiry_date')
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recent_orders', 'expiring_soon'));
+        return view('admin.dashboard', compact('stats', 'recent_orders', 'expiring_soon', 'lowStockDays', 'globalLowStock'));
+    }
+
+    public function updateAlertSettings(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $validated = $request->validate([
+            'expiry_warning_days' => 'required|integer|min:1|max:365',
+            'global_low_stock_threshold' => 'required|integer|min:1',
+        ]);
+
+        foreach ($validated as $key => $value) {
+            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
+
+        return back()->with('success', 'Alert configurations updated successfully.');
     }
 }

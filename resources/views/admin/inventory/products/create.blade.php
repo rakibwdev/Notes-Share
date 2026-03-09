@@ -87,6 +87,45 @@
                 </div>
             </div>
 
+            <!-- Low Stock Alert Configuration -->
+            <div class="bg-indigo-50/50 p-8 rounded-[2.5rem] border border-indigo-100/50 space-y-6" x-data="{ alertType: 'global' }">
+                <div class="flex items-center gap-4 border-b border-indigo-100 pb-4">
+                    <span class="text-2xl">🔔</span>
+                    <div>
+                        <h4 class="text-xs font-black text-indigo-900 uppercase tracking-widest italic">Stock Alert Configuration</h4>
+                        <p class="text-[8px] text-indigo-400 font-bold uppercase tracking-tighter">Choose how you want to be notified about low inventory</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Threshold Strategy</label>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-indigo-100 cursor-pointer hover:bg-indigo-50 transition-all group">
+                                <input type="radio" name="threshold_type" value="global" x-model="alertType" checked class="w-5 h-5 text-indigo-600 focus:ring-indigo-500/20">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-black text-indigo-900 uppercase italic">Use Global System Default</span>
+                                    <span class="text-[8px] text-slate-400 font-bold uppercase tracking-tighter">Managed via Dashboard Settings</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-indigo-100 cursor-pointer hover:bg-indigo-50 transition-all group">
+                                <input type="radio" name="threshold_type" value="individual" x-model="alertType" class="w-5 h-5 text-indigo-600 focus:ring-indigo-500/20">
+                                <div class="flex flex-col">
+                                    <span class="text-xs font-black text-indigo-900 uppercase italic">Set Individual Threshold</span>
+                                    <span class="text-[8px] text-slate-400 font-bold uppercase tracking-tighter">Custom value for this specific medicine</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4" x-show="alertType === 'individual'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Individual Alert Qty (Pieces)</label>
+                        <input type="number" name="low_stock_threshold" value="{{ old('low_stock_threshold') }}" min="1" class="w-full bg-white border-indigo-200 rounded-2xl p-5 text-sm font-black text-indigo-950 focus:ring-4 focus:ring-indigo-500/10 outline-none shadow-inner" placeholder="e.g. 50">
+                        <p class="text-[8px] text-indigo-400 font-bold italic">The system will alert you when stock falls below this quantity.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Description -->
             <div class="space-y-2">
                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Description</label>
