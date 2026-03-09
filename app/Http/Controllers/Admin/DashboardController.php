@@ -36,18 +36,4 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('stats', 'recent_orders', 'expiring_soon', 'lowStockDays', 'globalLowStock'));
     }
-
-    public function updateAlertSettings(Request $request): \Illuminate\Http\RedirectResponse
-    {
-        $validated = $request->validate([
-            'expiry_warning_days' => 'required|integer|min:1|max:365',
-            'global_low_stock_threshold' => 'required|integer|min:1',
-        ]);
-
-        foreach ($validated as $key => $value) {
-            Setting::updateOrCreate(['key' => $key], ['value' => $value]);
-        }
-
-        return back()->with('success', 'Alert configurations updated successfully.');
-    }
 }

@@ -61,7 +61,7 @@
 
                     <div class="pt-8 mt-8 border-t border-slate-100">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">System</p>
-                        <a href="#" class="flex items-center px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition-all">
+                        <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-600 hover:bg-slate-50' }}">
                             <span class="text-xl mr-3">⚙️</span>
                             <span class="text-sm">Settings</span>
                         </a>

@@ -3,16 +3,13 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="space-y-10" x-data="{ showExpiringModal: false, showSettingsModal: false }">
+<div class="space-y-10" x-data="{ showExpiringModal: false }">
     <!-- Welcome Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
             <h3 class="text-3xl font-black text-slate-900 tracking-tighter">Welcome back, Administrator 👋</h3>
             <p class="text-slate-500 mt-1">Here is a quick overview of your pharmacy's performance today.</p>
         </div>
-        <button @click="showSettingsModal = true" class="px-6 py-3 rounded-2xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm">
-            <span>⚙️</span> Alert Settings
-        </button>
     </div>
 
     <!-- KPI Grid -->
@@ -214,34 +211,6 @@
             <div class="p-8 bg-slate-50/50 border-t border-slate-50 flex justify-end">
                 <button @click="showExpiringModal = false" class="px-8 py-3 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest">Close Overview</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Alert Settings Modal -->
-    <div x-show="showSettingsModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4" x-cloak>
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showSettingsModal = false"></div>
-        <div class="relative w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in">
-            <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
-                <div>
-                    <h3 class="text-xl font-black text-slate-900 tracking-tighter uppercase italic">Alert Configuration</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">System-wide inventory thresholds</p>
-                </div>
-                <button @click="showSettingsModal = false" class="text-2xl text-slate-300 hover:text-slate-900">✕</button>
-            </div>
-            <form action="{{ route('admin.settings.update-alerts') }}" method="POST" class="p-8 space-y-6">
-                @csrf
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Expiry Warning Period (Days)</label>
-                    <input type="number" name="expiry_warning_days" value="{{ $lowStockDays }}" min="1" max="365" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 outline-none">
-                    <p class="text-[8px] text-slate-400 italic">Alert will show for batches expiring within these days.</p>
-                </div>
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest italic ml-1">Global Low Stock Threshold</label>
-                    <input type="number" name="global_low_stock_threshold" value="{{ $globalLowStock }}" min="1" class="w-full bg-slate-50 border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-indigo-500/20 outline-none">
-                    <p class="text-[8px] text-slate-400 italic">Default quantity to trigger low stock alerts across all products.</p>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all mt-4">Save Configuration</button>
-            </form>
         </div>
     </div>
 </div>
