@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'System Settings')
+@section('title', 'Settings')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-10">
     <div>
-        <h3 class="text-3xl font-black text-slate-900 tracking-tighter uppercase italic">System Configuration</h3>
+        <h3 class="text-3xl font-black text-slate-900 tracking-tighter uppercase italic">Configuration</h3>
         <p class="text-slate-500 mt-1 uppercase text-[10px] font-bold tracking-widest italic">Manage your pharmacy's global rules and identity</p>
     </div>
 

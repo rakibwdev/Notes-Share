@@ -125,7 +125,7 @@
                 </div>
                 <div class="flex items-center gap-8 justify-center lg:justify-start pt-4">
                     <div class="flex flex-col">
-                        <span class="text-2xl font-black text-slate-900 leading-none tracking-tighter">10k+</span>
+                        <sp     an class="text-2xl font-black text-slate-900 leading-none tracking-tighter">10k+</span>
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Users</span>
                     </div>
                     <div class="w-px h-8 bg-slate-200"></div>
@@ -138,7 +138,7 @@
             <div class="relative hidden lg:block">
                 <div class="absolute -top-20 -right-20 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-50"></div>
                 <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
-                <img src="https://img.freepik.com/free-photo/pharmacist-giving-medicine-customer-pharmacy_23-2148892589.jpg" 
+                <img src="https://media.istockphoto.com/id/1135284188/photo/if-you-need-its-here.jpg?s=612x612&w=0&k=20&c=2yfZHUqTEGW4-5r4Sc4pzWKx0DtubpdbTkX3h_w1AJg=" 
                      class="relative w-full rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border-[12px] border-white transform hover:scale-[1.02] transition-transform duration-700" 
                      alt="MedStore Hero">
             </div>
