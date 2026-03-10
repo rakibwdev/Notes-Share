@@ -30,7 +30,15 @@
 
     <div class="invoice-box">
         <div class="header">
-            <div class="logo">Notes<span style="color: #1e1b4b;">Share</span></div>
+            @php
+                $logo = \App\Models\Setting::getValue('logo_url');
+                $companyName = \App\Models\Setting::getValue('company_name', 'NotesShare');
+            @endphp
+            @if($logo)
+                <img src="{{ $logo }}" style="height: 50px; width: auto; object-contain;" alt="{{ $companyName }}">
+            @else
+                <div class="logo">{{ $companyName }}</div>
+            @endif
             <div class="invoice-info">
                 <h2 style="margin: 0; color: #4f46e5;">INVOICE</h2>
                 <p style="margin: 5px 0;">#INV-{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</p>

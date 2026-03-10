@@ -22,11 +22,19 @@
             <div class="flex justify-between h-20 items-center">
                 <!-- Logo -->
                 <a href="/" class="flex items-center gap-2 group">
-                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-100">💊</div>
-                    <div class="flex flex-col">
-                        <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none">Notes<span class="text-indigo-600">Share</span></span>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Online Pharmacy</span>
-                    </div>
+                    @php
+                        $logo = \App\Models\Setting::getValue('logo_url');
+                        $companyName = \App\Models\Setting::getValue('company_name', 'NotesShare');
+                    @endphp
+                    @if($logo)
+                        <img src="{{ $logo }}" class="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105" alt="{{ $companyName }}">
+                    @else
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-100">💊</div>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none uppercase">{{ $companyName }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Online Pharmacy</span>
+                        </div>
+                    @endif
                 </a>
 
                 <!-- Desktop Menu -->

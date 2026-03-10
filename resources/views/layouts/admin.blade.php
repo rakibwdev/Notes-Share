@@ -29,8 +29,16 @@
             <div class="h-full flex flex-col">
                 <!-- Logo -->
                 <div class="h-20 flex items-center px-8 border-b border-slate-100">
-                    <span class="text-2xl mr-2">🏥</span>
-                    <span class="text-xl font-black tracking-tighter text-indigo-950 uppercase">Notes<span class="text-indigo-600">Share</span></span>
+                    @php
+                        $logo = \App\Models\Setting::getValue('logo_url');
+                        $companyName = \App\Models\Setting::getValue('company_name', 'NotesShare');
+                    @endphp
+                    @if($logo)
+                        <img src="{{ $logo }}" class="h-8 w-auto object-contain" alt="{{ $companyName }}">
+                    @else
+                        <span class="text-2xl mr-2">🏥</span>
+                        <span class="text-xl font-black tracking-tighter text-indigo-950 uppercase">{{ $companyName }}</span>
+                    @endif
                 </div>
 
                 <!-- Nav -->
