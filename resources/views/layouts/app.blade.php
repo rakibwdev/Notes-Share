@@ -28,6 +28,7 @@
                     @endphp
                     @if($logo)
                         <img src="{{ $logo }}" class="h-10 md:h-12 w-auto object-contain transition-transform group-hover:scale-105" alt="{{ $companyName }}">
+                        <span class="text-xl font-black tracking-tighter text-indigo-950 leading-none uppercase ml-2">{{ $companyName }}</span>
                     @else
                         <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-100">💊</div>
                         <div class="flex flex-col">
@@ -183,8 +184,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
                 <div class="space-y-8 text-center md:text-left">
                     <div class="flex items-center gap-2 justify-center md:justify-start">
-                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl">💊</div>
-                        <span class="text-2xl font-black tracking-tighter uppercase italic">Notes<span class="text-indigo-500">Share</span></span>
+                        @if($logo)
+                            <img src="{{ $logo }}" class="h-10 w-auto object-contain" alt="{{ $companyName }}">
+                            <span class="text-xl font-black tracking-tighter uppercase italic ml-2">{{ $companyName }}</span>
+                        @else
+                            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl">💊</div>
+                            <span class="text-2xl font-black tracking-tighter uppercase italic">{{ $companyName }}</span>
+                        @endif
                     </div>
                     <p class="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                         Bangladesh's most trusted digital pharmacy. Dedicated to bringing healthcare accessibility to every doorstep with authenticity guaranteed.
