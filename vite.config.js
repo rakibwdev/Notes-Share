@@ -14,5 +14,6 @@ export default defineConfig({
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
+        https: true,
     },
 });
